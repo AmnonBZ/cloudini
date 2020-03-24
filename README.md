@@ -17,6 +17,8 @@ New features:
 - Clone this repo (using git clone)
 - Checkout to development branch (git checkout development)
 - Create you new Feature Branch (git checkout -b <my_fb_name>)
+- Activate the virtual env (venv\Scripts\activate)
+- Now you will be able to run the server locally (python manage.py runserver, using this command you can also change the access list and the port)
 - Develop your code and test it locally (you can push it to your own feature branch using - git add & git commit & git push)
 
 When you done with your feature - we will push it together to development:
