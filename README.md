@@ -36,6 +36,7 @@ For being able to work with the DB locally:
 Download and install PostgreSQL (9.6.X version) - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 set the Password to - Aa123456!
 To update your local DB with the relevant tables - after cloning the repo and checking out to your parituclar branch, run:
+* pip install pychopg2
 * python manage.py makemigrations
 * python manage.py migrate
 
