@@ -29,3 +29,14 @@ When you done with your feature - we will push it together to development:
 
 * Look for a git tutorial for better understand this flow (and this approach)
 
+
+====
+For being able to work with the DB locally:
+Download and install PostgreSQL (9.6.X version) - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
+set the Password to - Aa123456!
+To update your local DB with the relevant tables - after cloning the repo and checking out to your parituclar branch, run:
+* python manage.py makemigrations
+* python manage.py migrate
+
+Then, log in to your local DB (using pgadmin) and make sure that the cloudinis tables created (you should see 4 tables - customer, policy, activatedpolicy and violation)
+
