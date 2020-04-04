@@ -30,7 +30,8 @@ When you done with your feature - we will push it together to development:
 * Look for a git tutorial for better understand this flow (and this approach)
 
 
-====
+====================================
+
 For being able to work with the DB locally:
 Download and install PostgreSQL (9.6.X version) - https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 set the Password to - Aa123456!
