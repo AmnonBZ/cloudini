@@ -1,3 +1,9 @@
+
+# לשאול את אמנון למה צריך את זה: כי גם ככה לכל באקט בהכרח יש גם שם
+
+
+
+
 from cloudinis.models import *
 import boto3
 
