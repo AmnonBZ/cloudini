@@ -20,6 +20,6 @@ def ResourceLocationEC2(customer, policy):
                 ###we are checking if there is an living instance (not terminated) in the current region
                 ###only if it's not "Terrminated" it will be sent to the "invalid" array
                 if not instance['Instances'][0]['State']['Name'] == 'terminated':
-                    invalid.append(instance['Instances'])
+                    invalid.append(instance['Instances'][0]['InstanceId'])
 
     return invalid
