@@ -11,16 +11,19 @@ def ResourceLocation(customer, policy):
 
     for region in regionList:
 
-        activated_policies = ActivatedPolicy.objects.get(customer=customer, policy=policy)
+        #activated_policies = ActivatedPolicy.objects.get(customer=customer, policy=policy)
 
         client = boto3.client('s3', region_name=region)
         response = client.list_buckets()
+
         if not response["Buckets"] == []:
             for bucket in response["Buckets"]:
                 invalid.append(bucket["Name"])
         else:
             return "all good"
-        return invalid
+
+
+    return invalid
 
         # if response is not
 

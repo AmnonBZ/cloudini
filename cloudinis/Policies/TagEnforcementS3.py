@@ -8,7 +8,6 @@ from cloudinis.models import *
 import boto3
 
 
-# Currently - only applies to EC2
 
 
 def TagEnforcementS3(customer, policy):
