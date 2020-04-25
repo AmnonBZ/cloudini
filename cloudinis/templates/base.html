@@ -1,0 +1,86 @@
+{% load static %}
+<!doctype html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title> Cloudini </title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Place favicon.ico in the root directory -->
+        <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'css/app-blue.css' %}">
+    </head>
+    <body>
+        <div class="main-wrapper">
+            <div class="app" id="app">
+
+                <header class="header">
+                    i'm header
+                    <div class="header-block header-block-nav">
+                        <ul class="nav-profile">
+                            <li class="profile dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <img src = {% static 'pictures/account.png' %} height="50" width="70"> </img>
+                                </a>
+                                <div class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1">
+                                    <a class="dropdown-item" href="{% url 'profile' %}">
+                                        <i class="fa fa-user icon"></i> Profile </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="fa fa-gear icon"></i> Settings </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="login.html">
+                                        <i class="fa fa-power-off icon"></i> Logout </a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </header>
+
+{#            <img src = {% static 'pictures/home_pic.png' %} width="100%" height=auto> </img>#}
+            <article class="content dashboard-page">
+                    <section class="section">
+                        <div class="row sameheight-container">
+
+                <div>{% block content %}{% endblock %}</div>
+                        </div>
+                    </section>
+            </article>
+
+                <aside class="sidebar">
+                    <div class="sidebar-container">
+                        <div class="sidebar-header">
+                            <div class="brand">
+                                <div class="logo">
+                                </div> Cloudini Admin
+                            </div>
+                        </div>
+                        <nav class="menu">
+                            <ul class="sidebar-menu metismenu" id="sidebar-menu">
+                                <li class="active">
+                                    <a href="{% url 'home' %}">
+                                        <i class="fa fa-home"></i> Dashboard </a>
+                                </li>
+                                <li>
+                                        <a href="{% url 'view_policies' %}"></i> View Policies </a>
+                                </li>
+                                 <li>
+                                        <a href="{% url 'my_policies' %}"></i> My Policies </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                    <footer class="sidebar-footer">
+                        I'm sidebar-footer
+
+                    </footer>
+                </aside>
+                <footer class="footer">
+                    I'm footer
+                </footer>
+
+        <script src="{% static 'js/vendor.js' %}"></script>
+        <script src="{% static 'js/app.js' %}"></script>
+            </div></div>
+    </body>
+</html>

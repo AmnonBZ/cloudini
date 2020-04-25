@@ -1,0 +1,14 @@
+
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+
+
+    {% for policy in policies %}
+        <h4>{{ policy.name }}</h4>
+        <p>{{ policy.affectedResources }}</p>
+    {% endfor  %}
+
+
+{% endblock content %}
