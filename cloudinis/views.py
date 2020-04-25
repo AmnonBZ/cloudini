@@ -1,14 +1,19 @@
 from django.shortcuts import render
 from . import tempData
+from django.contrib.auth.decorators import login_required
+from .models import *
 
 
+@login_required(login_url='/accounts/')
 def home(request):
+    policies = Policy.objects.all()
     context = {
-        'policies': tempData.policies
+        'policies': policies
     }
     return render(request, 'home.html', context)
 
 
+@login_required(login_url='/accounts/')
 def profile(request):
     context = {
         'profileData': tempData.profileData
@@ -16,6 +21,7 @@ def profile(request):
     return render(request, 'profile.html', context)
 
 
+@login_required(login_url='/accounts/')
 def view_policies(request):
 
     context = {
@@ -28,6 +34,7 @@ def view_policies(request):
    # return render(request, 'view_policies.html', {'types': tempData.policyType})
 
 
+@login_required(login_url='/accounts/')
 def my_policies(request):
     context = {
 
@@ -35,6 +42,7 @@ def my_policies(request):
     return render(request, 'my_policies.html', context)
 
 
+@login_required(login_url='/accounts/')
 def violations(request):
     context = {
 
@@ -42,6 +50,7 @@ def violations(request):
     return render(request, 'violations.html', context)
 
 
+@login_required(login_url='/accounts/')
 def login(request):
     context = {
 
@@ -49,6 +58,7 @@ def login(request):
     return render(request, 'login.html', context)
 
 
+@login_required(login_url='/accounts/')
 def signup(request):
     context = {
 
@@ -56,6 +66,7 @@ def signup(request):
     return render(request, 'signup.html', context)
 
 
+@login_required(login_url='/accounts/')
 def logout(request):
     context = {
 

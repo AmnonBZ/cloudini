@@ -3,7 +3,6 @@ from .forms import CustomUserCreationForm
 from django.http import HttpResponse
 
 
-
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
