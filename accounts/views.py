@@ -1,20 +1,18 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from .forms import CustomUserCreationForm
+from django.http import HttpResponse
+
 
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             new_user = form.save()
-            new_user = authenticate(username=form.cleaned_data['username'],
-                                    password=form.cleaned_data['password1'],
-                                    )
-            login(request, new_user)
-            return redirect("/")
+            new_user.is_active = False
+            new_user.save()
+            return HttpResponse("<h1>Thanks for registering, Cloudinis's team will contact you soon</h1>")
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 

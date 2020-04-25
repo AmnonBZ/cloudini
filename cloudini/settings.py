@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'cloudini.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cloudini3',
+        'NAME': 'cloudini2',
         'USER': 'postgres',
         'PASSWORD': 'Aa123456!',
         'HOST': 'localhost',
@@ -128,4 +128,4 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-AUTH_USER_MODEL = 'cloudinis.CloudiniUser'
+AUTH_USER_MODEL = 'accounts.CloudiniUser'

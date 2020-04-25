@@ -1,24 +1,7 @@
-from django.contrib.auth.models import User
-# from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.contrib.auth.models import AbstractUser
 from django.conf import settings
-
-
-class CloudiniUser(AbstractUser):
-    class Meta:
-        unique_together = ('username', 'email')
-
-    def save(self, *args, **kwargs):
-        if not self.is_superuser:
-            self.is_active = False
-        super(CloudiniUser, self).save(*args, **kwargs)
-
-
-    def __str__(self):
-        return self.username
-
+from accounts.models import CloudiniUser
 
 class Policy(models.Model):
     name = models.CharField(max_length=200)

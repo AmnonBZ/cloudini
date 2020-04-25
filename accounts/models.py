@@ -1,3 +1,9 @@
-from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+
+class CloudiniUser(AbstractUser):
+    class Meta:
+        unique_together = ('username', 'email')
+
+    def __str__(self):
+        return self.username
