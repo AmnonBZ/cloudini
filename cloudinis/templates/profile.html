@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block content %}
+    <h3 class="title">My Profile</h3>
+        {% for datas in profileData %}
+            <h4>{{ datas.name }}</h4>
+            <p class="section">{{ datas.companyName }}</p>
+        {% endfor  %}
+{% endblock content %}
