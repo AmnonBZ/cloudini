@@ -2,6 +2,7 @@ from django.shortcuts import render
 from . import tempData
 from django.contrib.auth.decorators import login_required
 from .models import *
+from django.http import HttpResponseRedirect
 
 
 @login_required(login_url='/accounts/')
@@ -40,6 +41,28 @@ def my_policies(request):
 
     }
     return render(request, 'my_policies.html', context)
+
+
+@login_required(login_url='/accounts/')
+def create_a_policy_page(request):
+    context = {
+        'policies': Policy.objects.all()
+    }
+
+    return render(request, 'new_policy.html', context)
+
+
+@login_required(login_url='/accounts/')
+def create_a_policy(request):
+    organization = request.POST["organization"]
+    policy = request.POST["policy"]
+    affectedResource = request.POST["affectedResource"]
+    metadata = request.POST["metadata"]
+    actionItem = request.POST["actionItem"]
+    resourceTagToNotify = (request.POST["resourceTagToNotify"]).toLowerCase()
+    ActivatedPolicy.objects.create(organization=organization, policy=policy, affectedResource=affectedResource,
+                                   metadata=metadata, actionItem=actionItem, resourceTagToNotify=resourceTagToNotify)
+    return HttpResponseRedirect(my_policies)
 
 
 @login_required(login_url='/accounts/')

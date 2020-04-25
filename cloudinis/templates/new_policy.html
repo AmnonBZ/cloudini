@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h4>Create a new policy</h4>
+    <br/>
+    <form action="create_a_policy/" method="post">
+        <div class="form-group">
+            <label for="Policy">Policy</label>
+            <select id="Policy" name="Policy">
+                {% for policy in policies %}
+                    <option value="{{ policy }}">{{ policy }}</option>
+                {% endfor  %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="affectedResource">Affected Resource</label>
+            <select id="affectedResource" name="affectedResource">
+                {% for affectedResource in policy.affectedResources %}
+                    <option value="{{ affectedResource }}">{{ affectedResource }}</option>
+                {% endfor  %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="resourceTagToNotify">What XXX to enforce?</label>
+            <input type="text" name="resourceTagToNotify" class="form-control mb-2 mr-sm-2" id="resourceTagToNotify">
+        </div>
+
+        <div class="form-group">
+            <label for="resourceTagToNotify">Tag To Notify</label>
+            <input type="text" name="resourceTagToNotify" class="form-control mb-2 mr-sm-2" id="resourceTagToNotify">
+            * In case the requested tag won't be exist the main Cloudini user's email will be notified
+        </div>
+
+        <div class="form-group">
+            <label for="ActiomItem">Action Item</label>
+            <select id="ActiomItem" name="ActiomItem">
+                {% for affectedResource in policy.affectedResources %}
+                    <option value="{{ affectedResource }}">{{ affectedResource }}</option>
+                {% endfor  %}
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary mb-2">Create policy</button>
+    </form>
+
+{% endblock content %}
