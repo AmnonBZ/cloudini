@@ -16,7 +16,7 @@ class ActivatedPolicyDisplay(admin.ModelAdmin):
     list_filter = ('organization', 'policy', 'actionItem')
 
 class ViolationDisplay(admin.ModelAdmin):
-    list_display = ('connectedPolicy', 'resourceName')
+    list_display = ('connectedPolicy', 'resourceName', 'isChecked', 'isFixed')
     list_filter = ('connectedPolicy', 'resourceName')
 
 admin.site.register(CloudiniUser, UserAdmin)

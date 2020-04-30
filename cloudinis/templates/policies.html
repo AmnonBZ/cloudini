@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content%}
+<h3>Policies</h3>
+
+<form action="add_new_policy" method="post">
+<button type="submit" class="btn btn-sm btn-primary">Add a policy</button>
+</form>
+<form action="policy_reference" method="post">
+<button type="submit" class="btn btn-sm btn-primary">View Policy Reference</button>
+</form>
+
+<div class="row ml-2 mr-2">
+    <div class="col">
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Policy</th>
+                <th scope="col">Affected Resource</th>
+                <th scope="col">Information</th>
+                <th scope="col">Action Item</th>
+                <th scope="col">Tag To Notify</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for policy in policiesList %}
+                <tr>
+                <th scope="row">{{ policy.policy }}</th>
+                <th>{% for affectedResource in policy.affectedResource %}{{ affectedResource }}{% endfor %}</th>
+                <th>{% for metadata in policy.metadata %}{{ metadata }}{% endfor %}</th>
+                <th>{% for actionItem in policy.actionItem %}{{ actionItem }}{% endfor %}</th>
+                <th>{% for resourceTagToNotify in policy.resourceTagToNotify %}{{ resourceTagToNotify }}{% endfor %}</th>
+            {% endfor %}
+          </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

@@ -2,7 +2,8 @@ from django.shortcuts import render
 from . import tempData
 from django.contrib.auth.decorators import login_required
 from .models import *
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
+from cloudinis.policies.scan import *
 
 
 @login_required(login_url='/accounts/')
@@ -23,75 +24,29 @@ def profile(request):
 
 
 @login_required(login_url='/accounts/')
-def view_policies(request):
+def policies(request):
+    try:
+        policiesList = ActivatedPolicy.objects.all().filter(organization=request.user.id)
+    except ValueError:
+        policiesList = []
 
-    context = {
-        'all_policies': tempData.all_policies,
-        'types': tempData.policyType,
-        'a': [tempData.EC2_policies, tempData.S3_policies]
-    }
-    return render(request, 'view_policies.html', context)
-
-   # return render(request, 'view_policies.html', {'types': tempData.policyType})
-
-
-@login_required(login_url='/accounts/')
-def my_policies(request):
-    context = {
-
-    }
-    return render(request, 'my_policies.html', context)
-
-
-@login_required(login_url='/accounts/')
-def create_a_policy_page(request):
-    context = {
-        'policies': Policy.objects.all()
-    }
-
-    return render(request, 'new_policy.html', context)
-
-
-@login_required(login_url='/accounts/')
-def create_a_policy(request):
-    organization = request.POST["organization"]
-    policy = request.POST["policy"]
-    affectedResource = request.POST["affectedResource"]
-    metadata = request.POST["metadata"]
-    actionItem = request.POST["actionItem"]
-    resourceTagToNotify = (request.POST["resourceTagToNotify"]).toLowerCase()
-    ActivatedPolicy.objects.create(organization=organization, policy=policy, affectedResource=affectedResource,
-                                   metadata=metadata, actionItem=actionItem, resourceTagToNotify=resourceTagToNotify)
-    return HttpResponseRedirect(my_policies)
-
+    return render(request, 'policies.html', {
+        "policiesList": policiesList
+    })
+0
 
 @login_required(login_url='/accounts/')
 def violations(request):
-    context = {
-
-    }
-    return render(request, 'violations.html', context)
-
-
-@login_required(login_url='/accounts/')
-def login(request):
-    context = {
-
-    }
-    return render(request, 'login.html', context)
+    violationsList = Violation.objects.all().filter(connectedPolicy__organization=request.user.id, isFixed=False).order_by("date")
+    return render(request, 'violations.html', {
+        "violationsList": violationsList
+    })
 
 
 @login_required(login_url='/accounts/')
-def signup(request):
-    context = {
+def scan(request):
+    x = scan_for_violations(request.user.id)
 
-    }
-    return render(request, 'signup.html', context)
-
-
-@login_required(login_url='/accounts/')
-def logout(request):
-    context = {
-
-    }
-    return render(request, 'home.html', context)
+    return render(request, 'scan.html', {
+        "x": x
+    })
