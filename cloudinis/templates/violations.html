@@ -1,64 +1,46 @@
 {% extends "base.html" %}
-{% block content %}
-     <div style="text-align: center;">
-         <h3 class="title">View Policies</h3>
-     </div>
-            <div class="col-xl-6"  >
-                <div class="card sameheight-item" style="width: 1000px; height: 900px;" >
-                    <div class="card-block" style="width: 1000px; height: 900px;">
-                        <div class="card-title-block" >
-                          <div style="text-align: center;">
-                              <h3 class="title">All Policies </h3>
-                          </div>
-                        </div>
-                        <section class="section" >
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-pills">
-                        {% for type in types %}
-                            <li class="nav-item">
-                                <a href="" class="nav-link" data-target="#{{ type }}" aria-controls="{{ type }}" data-toggle="tab" role="tab">{{ type }}</a>
-                            </li>
-                        {% endfor  %}
-                        </ul>
 
-                        <!-- Tab panes -->
-                        <div class="tab-content">
+{% block content%}
 
-                            {% for type in types %}
-                                <div class="tab-pane fade" id="{{type}}">
-                                   <table class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Policy Name</th>
-                                                <th>Tags</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <!--type|add:"_policies"-->
-                                        {% for typename, policies in all_policies.items %}
-                                            {% if typename == type %}
-                                                 {% for  policy in policies %}
-                                                    <tr>
-                                                        <th scope="row"></th>
-                                                        <td>{{ policy.name }}</td>
-                                                        <td>{{ policy.title }}</td>
-                                                        <td>{{ policy.action }}</td>
-                                                    </tr>
-                                                {% endfor %}
-                                             {% endif %}
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% endfor  %}
-                        </div>
+<div class="row title-block cloudini-div-title">
+    <h3 class=" title cloudini-center-text"> Violations </h3>
+</div>
 
-                        </section>
-                    </div>
-                </div>
-            </div>
+
+<div align="center">
+    <form action="scan" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-lg btn-secondary ">Scan For Violations</button>
+    </form>
+</div>
+
+<div class="cloudini-card" >
+    <div class="cloudini-card card sameheight-item " >
+        <div class="card-block ">
+        <div class="card-title-block" >
+       <table class="table table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Connected Policy</th>
+                <th scope="col">Resource Name</th>
+                <th scope="col">First Appearance</th>
+                <th scope="col">Fixed Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for violation in violationsList %}
+                <tr>
+                <th scope="row">{{ violation.connectedPolicy }}</th>
+                <th>{{ violation.resourceName }}</th>
+                <th>{{ violation.date }}</th>
+                <th>{{ violation.fixedDate }}</th>
+            {% endfor %}
+          </tbody>
+        </table>
+        </div>
+        </div>
+    </div>
+</div>
 
 
 {% endblock content %}

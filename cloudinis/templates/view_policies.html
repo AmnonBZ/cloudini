@@ -1,19 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-     <div style="text-align: center;">
-         <h3 class="title">View Policies</h3>
-     </div>
-            <div class="col-xl-6"  >
-                <div class="card sameheight-item" style="width: 1000px; height: 900px;" >
-                    <div class="card-block" style="width: 1000px; height: 900px;">
-                        <div class="card-title-block" >
+
+        <div class="row title-block cloudini-div-title">
+            <h3 class=" title cloudini-center-text"> View Policies </h3>
+        </div>
+    <div class="cloudini">
+            <div  class="cloudini-card" >
+                <div class="cloudini-card card sameheight-item " >
+                    <div class="card-block ">
+                        <div class="card-title-block "  >
                           <div style="text-align: center;">
                               <h3 class="title">All Policies </h3>
                           </div>
                         </div>
                         <section class="section" >
                         <!-- Nav tabs -->
-                        <ul class="nav nav-pills">
+                        <ul class="nav nav-pills " >
                         {% for type in types %}
                             <li class="nav-item">
                                 <a href="" class="nav-link" data-target="#{{ type }}" aria-controls="{{ type }}" data-toggle="tab" role="tab">{{ type }}</a>
@@ -22,12 +24,12 @@
                         </ul>
 
                         <!-- Tab panes -->
-                        <div class="tab-content">
+                        <div class="tab-content" >
 
                             {% for type in types %}
-                                <div class="tab-pane fade" id="{{type}}">
-                                   <table class="table table-hover">
-                                        <thead>
+                                <div class="tab-pane fade" id="{{type}}" >
+                                   <table class="table  table-hover " >
+                                        <thead class="thead-light">
                                             <tr>
                                                 <th></th>
                                                 <th>Policy Name</th>
@@ -39,6 +41,7 @@
                                             <!--type|add:"_policies"-->
                                         {% for typename, policies in all_policies.items %}
                                             {% if typename == type %}
+                                            {% for x in range %}
                                                  {% for  policy in policies %}
                                                     <tr>
                                                         <th scope="row"></th>
@@ -46,6 +49,7 @@
                                                         <td>{{ policy.title }}</td>
                                                         <td>{{ policy.action }}</td>
                                                     </tr>
+                                                {% endfor %}
                                                 {% endfor %}
                                              {% endif %}
                                         {% endfor %}
@@ -59,6 +63,5 @@
                     </div>
                 </div>
             </div>
-
-
+    </div>
 {% endblock content %}
