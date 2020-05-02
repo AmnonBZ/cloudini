@@ -1,16 +1,24 @@
 {% extends "base.html" %}
 
 {% block content%}
-<h3>Violations</h3>
 
-<form action="scan" method="post">
-{% csrf_token %}
-<button type="submit" class="btn btn-sm btn-success">Scan For Violations</button>
-</form>
+<div class="row title-block cloudini-div-title">
+    <h3 class=" title cloudini-center-text"> Violations </h3>
+</div>
 
-<div class="row ml-2 mr-2">
-    <div class="col">
-        <table class="table">
+
+<div align="center">
+    <form action="scan" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-lg btn-secondary ">Scan For Violations</button>
+    </form>
+</div>
+
+<div class="cloudini-card" >
+    <div class="cloudini-card card sameheight-item " >
+        <div class="card-block ">
+        <div class="card-title-block" >
+       <table class="table table-hover">
             <thead class="thead-light">
             <tr>
                 <th scope="col">Connected Policy</th>
@@ -29,7 +37,10 @@
             {% endfor %}
           </tbody>
         </table>
+        </div>
+        </div>
     </div>
 </div>
+
 
 {% endblock content %}

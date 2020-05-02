@@ -16,7 +16,9 @@
             <div class="app" id="app">
 
                 <header class="header">
-                    i'm header
+                {% if user.is_authenticated %}
+                    <h1 class="cloudini-font-Niconne"> Welcome,  {{ user.username }}</h1>
+                {% endif %}
                     <div class="header-block header-block-nav">
                         <ul class="nav-profile">
                             <li class="profile dropdown">
@@ -25,7 +27,7 @@
                                 </a>
                                 <div class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1">
                                     {% if user.is_authenticated %}
-                                    Hello, {{ user.username }}
+                                     <p class="lead">{{ user.username }}</p>
                                     <a class="dropdown-item" href="{% url 'profile' %}">
                                         <i class="fa fa-user icon"></i> Profile </a>
                                     <a class="dropdown-item" href=#">
@@ -71,6 +73,9 @@
                                         <i class="fa fa-home"></i> Dashboard </a>
                                 </li>
                                 <li>
+                                        <a href="{% url 'view_policies' %}"></i> View Policies </a>
+                                </li>
+                                <li>
                                         <a href="{% url 'policies' %}"></i> Policies </a>
                                 </li>
                                  <li>
@@ -80,16 +85,19 @@
                         </nav>
                     </div>
                     <footer class="sidebar-footer">
-                        I'm sidebar-footer
+
 
                     </footer>
                 </aside>
                 <footer class="footer">
-                    I'm footer
+
+                    <div>© 2020 Cloudini. All Rights Reserved. </div>
+
                 </footer>
 
         <script src="{% static 'js/vendor.js' %}"></script>
         <script src="{% static 'js/app.js' %}"></script>
+
             </div></div>
     </body>
 </html>

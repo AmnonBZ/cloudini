@@ -50,3 +50,20 @@ def scan(request):
     return render(request, 'scan.html', {
         "x": x
     })
+
+@login_required(login_url='/accounts/')
+def view_policies(request):
+    context = {
+        'all_policies': tempData.all_policies,
+        'types': tempData.policyType,
+        'a': [tempData.EC2_policies, tempData.S3_policies],
+        'range' : range(10)
+    }
+    return render(request, 'view_policies.html', context)
+
+@login_required(login_url='/accounts/')
+def new_policy(request):
+    context = {
+        'all_policies': tempData.all_policies,
+    }
+    return render(request, 'new_policy.html', context)
