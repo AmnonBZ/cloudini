@@ -11,13 +11,13 @@ def VolumeEncryption(customer, policy):
     invalid = []
 
     for region in regionList:
-        try:
-            activated_policies = ActivatedPolicy.objects.get(customer=customer, policy=policy)
-        except ActivatedPolicy.DoesNotExist:
-            activated_policies = None
+        # try:
+        #     activated_policies = ActivatedPolicy.objects.get(customer=customer, policy=policy)
+        # except ActivatedPolicy.DoesNotExist:
+        #     activated_policies = None
 
-            client = boto3.client('ec2', region_name=region)
-            response = client.describe_volumes()
+        client = boto3.client('ec2', region_name=region)
+        response = client.describe_volumes()
 
 
         for volume in response["Volumes"]:
