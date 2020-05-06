@@ -6,10 +6,11 @@ def IAMKey(customer, policy):
     regionList = ["us-east-1"]
     invalid = []
     for region in regionList:
-        try:
-            activated_policies = ActivatedPolicy.objects.get(customer=customer, policy=policy)
-        except ActivatedPolicy.DoesNotExist:
-            activated_policies = None
+        # try:
+        #     activated_policies = ActivatedPolicy.objects.get(customer=customer, policy=policy)
+        # except ActivatedPolicy.DoesNotExist:
+        #     activated_policies = None
+
         client = boto3.client('iam', region_name=region)
         resource = boto3.resource('iam')
         boto3.setup_default_session(profile_name='IAM')

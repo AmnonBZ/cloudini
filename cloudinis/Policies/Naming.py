@@ -6,12 +6,14 @@ def Naming(customer, policy):
     invalid = []
 
     client = boto3.client('ec2', region_name=region)
-    response = client.describe_instances(Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
-    #for instance in response:
-        # if not instance[0]['Reservations'][0]['Instances']['State']['Name'] == 'terminated':
-    for i in response['Reservations']:
-        for j in i['Instances']:
-            invalid.append(j['Tags'][0]['Value'])
+
+    # response = client.describe_instances(Filters=[{'Name': 'tag: Name', 'Values': ['']}])
+    # invalid.append(response)
+
+    # for instance in response:
+    #     if not instance[0]['Reservations'][0]['Instances']['State']['Name'] == 'terminated':
+    #invalid.append(response['ResponseMetadata']['HTTPHeaders']['server'])
+
 
 
     return invalid

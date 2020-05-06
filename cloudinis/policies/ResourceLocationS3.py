@@ -1,81 +1,30 @@
-from cloudinis.Policies.clientApply import *
-from cloudinis.Policies.validator import *
-import boto3
-from datetime import datetime
-from django.core.exceptions import ObjectDoesNotExist
 from cloudinis.models import *
-import sys
+import boto3
+
+# Currently - only applies to S3
+
+def ResourceLocationS3(customer, policy):
+    # regionList = ["us-east-2", "us-east-1", "us-west-1", "us-west-2", "ap-east-1", "ap-south-1", "ap-northeast-3", "ap-northeast-2", "ap-southeast-1", "ap-southeast-2", "ap-northeast-1", "ca-central-1", "eu-central-1", "eu-west-1", "eu-west-2", "eu-west-3", "eu-north-1", "me-south-1", "sa-east-1"]
+    regionList = ["us-east-1"]
+
+    invalid = []
+
+    for region in regionList:
+
+        #activated_policies = ActivatedPolicy.objects.get(customer=customer, policy=policy)
+
+        client = boto3.client('s3', region_name=region)
+        response = client.list_buckets()
+
+        if not response["Buckets"] == []:
+            for bucket in response["Buckets"]:
+                invalid.append(bucket["Name"])
+        else:
+            return "all good"
 
 
-###### NEEDED TO BE FIXED!!!
+    return invalid
 
-def ResourceLocationS3(activatedPolicy):
-    response = clientApply("s3", "list_buckets")
+        # if response is not
 
-    # --------------------------------------------------------------------------------------------
-    if not response["Buckets"] == []:
-        for bucket in response["Buckets"]:
-    # --------------------------------------------------------------------------------------
-            validator("Name", bucket, activatedPolicy)
-
-
-    return "Finished succesfully"
-
-
-
-
-
-
-        # regionList = ["us-east-1"]
-        # bucketsName = []
-        # try:
-        #      for region in regionList:
-        #          client = boto3.client('s3', region_name="us-east-1", aws_access_key_id="ASIARZNQPU7K2SDULI6R",
-        #                       aws_secret_access_key="+6rcbEObSkJ4g+9YoCsVfKA3qazzsl90JSeXEHon",
-        #                       aws_session_token="FwoGZXIvYXdzEBAaDP0Ti6qlVf3nnJiSlSLDAawCsjZ7qGlahKmx+eY0xY/Mxk76D+WmrOFT4X9wI0mpWG/sVJN/JbieyIQ12q+eLCUJObrarkrdSk8KeQbGmt6uMV2+sGAZpywRTBXBsi0KDgYNEjRZ+87gDYY9lfi+NLLXNoP+O4rdalbgm84K5CY3EdDrgfoPsLqIWoIu+HnN9L7D85eloknLqcnVi75mJDqMdLP684FiccWuaIzc5tNt/aEFDVXbqtJgV3pLAvLaznP+KovSOAI6HWxD3Lplbl+yWSjf4er1BTIt0LiGk5jIob2gaQlczzRaTG289333EMlFMpGwl02W7Lm8aJWxMLc3xR1ZTfP/")
-        #          response = client.list_buckets()
-        #          if not response["Buckets"] == []:
-        #             for instance in response["Buckets"]:
-        #                 bucketsName.append(instance["Name"])
-        #                 if not set(activatedPolicy.metadata).issubset(set(bucketsName)):
-        #                     try:
-        #                         try:
-        #                             validator = Violation.objects.get(connectedPolicy=activatedPolicy,
-        #                                                             resourceName=instance["Name"])
-        #                             if validator:
-        #                                  validator.isChecked = True
-        #                                  validator.isFixed = False
-        #                                  validator.save()
-        #                             else:
-        #                                  Violation.objects.create(connectedPolicy=activatedPolicy, resourceName=instance["Name"],
-        #                                          date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
-        #                                          isFixed=False)
-        #
-        #                         except ObjectDoesNotExist:
-        #                                 Violation.objects.create(connectedPolicy=activatedPolicy, resourceName=instance["Name"],
-        #                                      date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
-        #                                      isFixed=False)
-        #
-        #                     except KeyError:
-        #                         try:
-        #                               validator = Violation.objects.get(connectedPolicy=activatedPolicy,
-        #                                                       resourceName=instance["Name"])
-        #                               if validator:
-        #                                  validator.isChecked = True
-        #                                  validator.isFixed = False
-        #                                  validator.save()
-        #                               else:
-        #                                      Violation.objects.create(connectedPolicy=activatedPolicy,
-        #                                      resourceName=instance["Name"],
-        #                                      date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
-        #                                     isFixed=False)
-        #                         except ObjectDoesNotExist:
-        #                                             Violation.objects.create(connectedPolicy=activatedPolicy, resourceName=instance["Name"],
-        #                                              date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
-        #                                              isFixed=False)
-        #
-        # except:
-        #     return sys.exc_info()
-        #
-        # return "Finished succesfully"
-        #
+    # return invalid
