@@ -16,10 +16,11 @@ def ResourceLocationEC2(customer, policy):
 # checking if there are any instances on the specific region (which arn't allowed to exist)
         if not response == []:
 
-            for instance in response["Reservations"]:
+            for i in response['Reservations']:
+                for j in i['Instances']:
                 ###we are checking if there is an living instance (not terminated) in the current region
                 ###only if it's not "Terrminated" it will be sent to the "invalid" array
-                if not instance['Instances'][0]['State']['Name'] == 'terminated':
-                    invalid.append(instance['Instances'])
+                    if not j['State']['Name'] == 'terminated':
+                        invalid.append(j['InstanceId'])
 
     return invalid
