@@ -4,7 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from .models import *
 from django.http import HttpResponse
-from cloudinis.policies.scan import *
+from cloudinis.Policies.scan import *
 from django.views.generic import (
     ListView,
     DetailView,
@@ -107,5 +107,3 @@ class PolicyDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
         return True
-
-

@@ -1,0 +1,15 @@
+from cloudinis.Policies.clientApply import *
+from cloudinis.Policies.validator import *
+import boto3
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
+from cloudinis.models import *
+import sys
+
+def (activatedPolicy):
+    response = clientApply("ec2", "describe_instances")
+#--------------------------------------------------------------------------------------------
+algorithm here
+#--------------------------------------------------------------------------------------
+                        validator("InstanceId", instance, activatedPolicy)
+    return "Finished succesfully"
