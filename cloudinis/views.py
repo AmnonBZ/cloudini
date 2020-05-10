@@ -1,9 +1,18 @@
 from django.shortcuts import render
 from . import tempData
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from .models import *
 from django.http import HttpResponse
 from cloudinis.policies.scan import *
+from django.views.generic import (
+    ListView,
+    DetailView,
+    CreateView,
+    UpdateView,
+    DeleteView
+)
+from django import forms
 
 
 @login_required(login_url='/accounts/')
@@ -33,7 +42,7 @@ def policies(request):
     return render(request, 'policies.html', {
         "policiesList": policiesList
     })
-0
+
 
 @login_required(login_url='/accounts/')
 def violations(request):
@@ -67,3 +76,31 @@ def new_policy(request):
         'all_policies': tempData.all_policies,
     }
     return render(request, 'new_policy.html', context)
+
+
+class PolicyListView(ListView):
+    model =  ActivatedPolicy
+    template_name = 'policies.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'policies'
+    #ordering = ['-date_posted']
+
+
+class PolicyDetailView(DetailView):
+    model = ActivatedPolicy
+
+class PolicyCreateView(LoginRequiredMixin, CreateView):
+    model = ActivatedPolicy
+    fields = ['organization', 'policy','affectedResource', 'metadata', 'actionItem', 'resourceTagToNotify']
+
+
+class PolicyDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Policy
+    success_url = 'policies'
+
+    # def test_func(self):
+    #     policy = self.get_object()
+    #     if self.request.organization == policy.organization:
+    #         return True
+    #     return False
+
+
