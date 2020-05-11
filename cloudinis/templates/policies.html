@@ -34,6 +34,7 @@
                 <th>{% for metadata in policy.metadata %}{{ metadata }}{% endfor %}</th>
                 <th>{% for actionItem in policy.actionItem %}{{ actionItem }}{% endfor %}</th>
                 <th>{% for resourceTagToNotify in policy.resourceTagToNotify %}{{ resourceTagToNotify }}{% endfor %}</th>
+                <th><a href="{% url 'delete_policy' policy.id %}">delete </a></th>
             {% endfor %}
           </tbody>
         </table>

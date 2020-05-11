@@ -16,6 +16,6 @@ urlpatterns = [
     path('scan', views.scan, name='scan'),
     path('new_policy', PolicyCreateView.as_view(), name='new_policy'),
     path('policies', PolicyListView.as_view(), name='policies'),
-    path('delete_policy', PolicyDeleteView.as_view(), name='delete_policy'),
+    path('policies/<int:pk>/delete/', PolicyDeleteView.as_view(), name='delete_policy'),
 
 ]

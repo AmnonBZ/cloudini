@@ -94,13 +94,18 @@ class PolicyCreateView(LoginRequiredMixin, CreateView):
 
 
 class PolicyDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Policy
-    success_url = 'policies'
+    model = ActivatedPolicy
+    success_url = '/policies'
+
 
     # def test_func(self):
-    #     policy = self.get_object()
-    #     if self.request.organization == policy.organization:
-    #         return True
-    #     return False
+        # activatedpolicy = self.get_object()
+        # if activatedpolicy.organization == self.request.CloudiniUser.id:
+        #     return True
+        # return False
+
+
+    def test_func(self):
+        return True
 
 
