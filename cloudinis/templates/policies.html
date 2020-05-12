@@ -7,7 +7,7 @@
 </div>
 
 <div align="center">
-    <button id="myBtn" class=" btn btn-lg btn-secondary ">Add New Policy</button>
+    <button id="myBtn" class=" btn btn-lg btn-secondary " onclick='location.href="{% url 'new_policy' %}"'>Add New Policy</button>
 </div>
 
 <div class="cloudini-card" >
@@ -22,19 +22,19 @@
                 <th scope="col">Information</th>
                 <th scope="col">Action Item</th>
                 <th scope="col">Tag To Notify</th>
+                <th scope="col"></th>
             </tr>
-
-
             </thead>
             <tbody>
 
-            {% for policy in policiesList %}
+            {% for policy in policies %}
                 <tr>
                 <th scope="row">{{ policy.policy }}</th>
                 <th>{% for affectedResource in policy.affectedResource %}{{ affectedResource }}{% endfor %}</th>
                 <th>{% for metadata in policy.metadata %}{{ metadata }}{% endfor %}</th>
                 <th>{% for actionItem in policy.actionItem %}{{ actionItem }}{% endfor %}</th>
                 <th>{% for resourceTagToNotify in policy.resourceTagToNotify %}{{ resourceTagToNotify }}{% endfor %}</th>
+                <th><a href="{% url 'delete_policy' policy.id %}">delete </a></th>
             {% endfor %}
           </tbody>
         </table>
@@ -42,6 +42,15 @@
 </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
 
 <!-- The Modal -->
 <div id="myModal" class="cloudini-modal">
@@ -98,7 +107,7 @@
 
 </div>
 
-    <script src="{% static 'js/new_policy.js' %}"></script>
+    <!--<script src="{% static 'js/new_policy.js' %}"></script>-->
 
 
 

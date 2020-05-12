@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="row title-block cloudini-div-title">
+    <h3 class=" title cloudini-center-text"> Create a New Policy </h3>
+</div>
+    <div >
+        <div class="card">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+
+            <input type="submit" value="Save">
+        </form>
+        </div>
+    </div>
+
+{% endblock content %}

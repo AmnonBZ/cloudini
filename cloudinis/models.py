@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.conf import settings
 from accounts.models import CloudiniUser
+from django.urls import reverse
 
 class Policy(models.Model):
     name = models.CharField(max_length=200)
@@ -21,6 +22,10 @@ class ActivatedPolicy(models.Model):
 
     def __str__(self):
         return "{}-{}-{}".format(self.organization, self.policy, self.affectedResource)
+
+    def get_absolute_url(self):
+        return reverse('policies')
+
 
 
 class Violation(models.Model):

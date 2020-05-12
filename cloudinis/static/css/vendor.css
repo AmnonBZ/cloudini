@@ -8585,7 +8585,9 @@ pre code {
 
 .cloudini-center-text {
   display: inline-block;
-  left: 19px;
+  margin: 0 auto;
+}
+
 }
 .cloudini-div-title {
   position: relative;
