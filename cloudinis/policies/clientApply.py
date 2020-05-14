@@ -4,16 +4,23 @@ from django.core.exceptions import ObjectDoesNotExist
 from cloudinis.models import *
 import sys
 
+aws_access_key_id="ASIARZNQPU7KW6WFIOE3"
+aws_secret_access_key="YBaxNzhQR1Gl5ZoOC7CEGRBh/Xho8dp46j54nRT2"
+aws_session_token="FwoGZXIvYXdzEDsaDJe6PNwQoQdY0J0LdiLDAb/5dFD0xgYfRv6HeLbE4PZwW5TXwjATfZCxQWqgwFVmYBqKBX1hTcpTqoa5AiiNQFjFWv+JamzO/TCaTI9eT4j22p/aiYz+BI5aN+ByBWt99PB5oWs2oHY07qlU9+h1md6AZGtlSoqYPDDJRg32Ns8iJ+/vUPRFbmNkOlkcuB4HQQs1pJtvpmvOdMPqupzP1WntTvCKWfxZkPqcOy8zO2jsq/ugS8vGk1Iwj6mYNtseTosJhljYQ2YKrs5/dQ2oIw7VZijupfT1BTItW8oJd32hgUkuO9bABRtjp5GXoaRlCMhAZqVqGFbvR0iJWeDlGkQJTyunfonD"
+
+def resourceHandler(resource, region):
+    return boto3.resource(resource, region_name=region,
+                        aws_access_key_id=aws_access_key_id,
+                          aws_secret_access_key=aws_secret_access_key,
+                            aws_session_token=aws_session_token)
 
 def clientHandler(resource, region):
     return boto3.client(resource, region_name=region,
-                        aws_access_key_id="ASIARZNQPU7KVGZWIKMT",
-                          aws_secret_access_key="+uSfUWozDVgD+YIZOOFhfcuNqUsXa589UuIcq8bw",
-                            aws_session_token="FwoGZXIvYXdzEBUaDL2skVKGQOj4mpvyzCLDAY3HHIdo0JJBB3IGK7wJAGrvjRSpSflWrqawkLs/mSfu70fVXKdv/iuWhTQs/fU8SeoABRZEYkWbLM9v8C3sSnAvssaoAEYniw3ZK/Fyebs9ttlk8ZYMgC0QyiJ1ehs8kZalC+/MoJj30njL1ti+Xv+WxHxWs9c074y33LgonO57oYDqOdkHqjdXc8y2PVXgOY+rWgwM0+Kgt25b5YTshw5VBbri66q4ZXdrw8Q/fQa4x8+Ngv230sUmwV3i66BiXAoEMCjx++v1BTItmpmCILHHvdTeyX/Tvrum1zhRIpmvYVM3UZ5UskH+Qs9fUMCkt4JC4JP0VrOK")
-
+                        aws_access_key_id=aws_access_key_id,
+                          aws_secret_access_key=aws_secret_access_key,
+                            aws_session_token=aws_session_token)
 
 def clientApply(resource, wheretorun):
-
     regionList = ["us-east-1"]
     for region in regionList:
         client = clientHandler(resource, region)
@@ -27,62 +34,6 @@ def clientApply(resource, wheretorun):
         if wheretorun == "describe_addresses":
             response = client.describe_addresses()
 
-
         return response
-
-
-
-
-
-#---------------------------------BUCKETS-------------------------------------------------------
-            # if wheretorun == "list_buckets":
-            #     response = client.list_buckets()
-                    # for instance in response["Buckets"]:
-#                         try:
-#                             try:
-#                                 validator = Violation.objects.get(connectedPolicy=activatedPolicy,
-#                                                                   resourceName=instance["Name"])
-#                                 if validator:
-#                                     validator.isChecked = True
-#                                     validator.isFixed = False
-#                                     validator.save()
-#                                 else:
-#                                     Violation.objects.create(connectedPolicy=activatedPolicy, resourceName=instance["Name"],
-#                                                              date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
-#                                                              isFixed=False)
-#
-#                             except ObjectDoesNotExist:
-#                                 Violation.objects.create(connectedPolicy=activatedPolicy, resourceName=instance["Name"],
-#                                                          date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
-#                                                          isFixed=False)
-#
-#                         except KeyError:
-#                             try:
-#                                 validator = Violation.objects.get(connectedPolicy=activatedPolicy,
-#                                                                   resourceName=instance["Name"])
-#                                 if validator:
-#                                     validator.isChecked = True
-#                                     validator.isFixed = False
-#                                     validator.save()
-#                                 else:
-#                                     Violation.objects.create(connectedPolicy=activatedPolicy,
-#                                                              resourceName=instance["Name"],
-#                                                              date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
-#                                                              isFixed=False)
-#                             except ObjectDoesNotExist:
-#                                 Violation.objects.create(connectedPolicy=activatedPolicy, resourceName=instance["Name"],
-#                                                          date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
-#                                                          isFixed=False)
-# #-------------------------------INSTANCES-------------------------------------------------------
-#             if wheretorun == "describe_instances":
-#                 response = client.describe_instances()
-#
-#
-# #----------------------------VOLUMES------------------------------------------------------------
-#             if wheretorun == "describe_volumes":
-#                 response = client.describe_volumes()
-
-
-
 
 
