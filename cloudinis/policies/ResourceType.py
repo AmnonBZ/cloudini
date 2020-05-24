@@ -1,6 +1,7 @@
 from cloudinis.models import *
 import boto3
 
+
 # Currently - only applies to EC2
 
 def ResourceType(customer, policy):

@@ -22,8 +22,9 @@ def scan_for_violations(organization):
         violation.isChecked = False
         violation.save()
 
-    customerActivatedPolicy = ActivatedPolicy.objects.filter(organization=organization)
 
+    output = ""
+    customerActivatedPolicy = ActivatedPolicy.objects.filter(organization=organization)
     if customerActivatedPolicy:
         for activatedPolicy in customerActivatedPolicy:
             if "AttachedVolumes" in activatedPolicy.policy.name:
@@ -48,15 +49,24 @@ def scan_for_violations(organization):
                 output = VolumeEncryptionS3(activatedPolicy)
 
 
-# After operations
-    allViolations = Violation.objects.all()
-    for violation in allViolations:
-        if (violation.isChecked is False) and (violation.isFixed is False):
-            violation.isFixed = True
-            violation.isChecked = True
-            violation.fixedDate = datetime.now().strftime("%F %H:%M:%S")
-            violation.save()
 
-        deleteme(violation.resourceName, 'instance')
+# After operations
+            allViolations = Violation.objects.all()
+            for violation in allViolations:
+                if (violation.isChecked is False) and (violation.isFixed is False):
+                    violation.isFixed = True
+                    violation.isChecked = True
+                    violation.fixedDate = datetime.now().strftime("%F %H:%M:%S")
+                    violation.save()
+
+                if activatedPolicy.actionItem == "deleteme":
+                    deleteme(violation.resourceName, "instance")
+                if activatedPolicy.actionItem == "notify":
+                    print("skipping")
+            #notify()
+                else:
+                    None
+                    #todo Couldnt fix by myself :: if activatedPolicy.actionItem == "deleteme"
+                    #the problem :: .actionItem is not recognized by the system
 
     return output
