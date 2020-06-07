@@ -15,17 +15,16 @@ class Policy(models.Model):
 class ActivatedPolicy(models.Model):
     organization = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    affectedResource = models.CharField(max_length=200)
-    metadata = ArrayField(models.CharField(max_length=200))
-    actionItem = ArrayField(models.CharField(max_length=200))
-    resourceTagToNotify = ArrayField(models.CharField(max_length=200))
+    affectedResource = models.CharField(max_length=200 ,  verbose_name="Resource")
+    metadata = ArrayField(models.CharField(max_length=200,),verbose_name="What to enforce")
+    actionItem = ArrayField(models.CharField(max_length=200), verbose_name="Action item")
+    resourceTagToNotify = ArrayField(models.CharField(max_length=200), verbose_name="Tag to enforce")
 
     def __str__(self):
         return "{}-{}-{}".format(self.organization, self.policy, self.affectedResource)
 
     def get_absolute_url(self):
         return reverse('policies')
-
 
 
 class Violation(models.Model):

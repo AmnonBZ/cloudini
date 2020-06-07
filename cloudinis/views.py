@@ -1,5 +1,5 @@
+from django.http import JsonResponse
 from django.shortcuts import render
-from . import tempData
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from .models import *
@@ -23,25 +23,34 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
+def view_policies(request):
+    policies = Policy.objects.all()
+    resources = ['EC2','S3','CloudWatch']
 
-@login_required(login_url='/accounts/')
-def profile(request):
+
     context = {
-        'profileData': tempData.profileData
+        'all_policies': policies,
+        'resources' : resources,
     }
-    return render(request, 'profile.html', context)
+
+    return render(request, 'view_policies.html', context)
 
 
-@login_required(login_url='/accounts/')
-def policies(request):
-    try:
-        policiesList = ActivatedPolicy.objects.all().filter(organization=request.user.id)
-    except ValueError:
-        policiesList = []
 
-    return render(request, 'policies.html', {
-        "policiesList": policiesList
-    })
+def about(request):
+    return render(request, 'about.html')
+
+
+# @login_required(login_url='/accounts/')
+# def policies(request):
+#     try:
+#         policiesList = ActivatedPolicy.objects.all().filter(organization=request.user.id)
+#     except ValueError:
+#         policiesList = []
+#
+#     return render(request, 'policies.html', {
+#         "policiesList": policiesList
+#     })
 
 
 @login_required(login_url='/accounts/')
@@ -60,50 +69,54 @@ def scan(request):
         "x": x
     })
 
-@login_required(login_url='/accounts/')
-def view_policies(request):
-    context = {
-        'all_policies': tempData.all_policies,
-        'types': tempData.policyType,
-        'a': [tempData.EC2_policies, tempData.S3_policies],
-        'range' : range(10)
-    }
-    return render(request, 'view_policies.html', context)
 
-@login_required(login_url='/accounts/')
-def new_policy(request):
-    context = {
-        'all_policies': tempData.all_policies,
-    }
-    return render(request, 'new_policy.html', context)
-
+# class AllPolicyListView(ListView):
+#     model =  Policy
+#     template_name = 'cloudinis/view_policies.html'  # <app>/<model>_<viewtype>.html
+#     context_object_name = 'policies'
+#     ordering = ['-name']
 
 class PolicyListView(ListView):
     model =  ActivatedPolicy
-    template_name = 'policies.html'  # <app>/<model>_<viewtype>.html
+    template_name = 'cloudinis/policies.html'  # <app>/<model>_<viewtype>.html
     context_object_name = 'policies'
-    #ordering = ['-date_posted']
+    ordering = ['-policy']
 
-
-class PolicyDetailView(DetailView):
-    model = ActivatedPolicy
 
 class PolicyCreateView(LoginRequiredMixin, CreateView):
     model = ActivatedPolicy
-    fields = ['organization', 'policy','affectedResource', 'metadata', 'actionItem', 'resourceTagToNotify']
+    fields = ['policy','affectedResource', 'metadata', 'actionItem', 'resourceTagToNotify']
+
+    def form_valid(self,form):
+        form.instance.organization = self.request.user
+        return super().form_valid(form)
+
+class PolicyUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
+    model = ActivatedPolicy
+    fields = ['policy', 'affectedResource', 'metadata', 'actionItem', 'resourceTagToNotify']
+
+    def form_valid(self, form):
+        form.instance.organization = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        policy = self.get_object()
+        if self.request.user == policy.organization:
+            return True
+        return False
 
 
 class PolicyDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = ActivatedPolicy
     success_url = '/policies'
 
-
-    # def test_func(self):
-        # activatedpolicy = self.get_object()
-        # if activatedpolicy.organization == self.request.CloudiniUser.id:
-        #     return True
-        # return False
-
+    def form_valid(self, form):
+        form.instance.organization = self.request.user
+        return super().form_valid(form)
 
     def test_func(self):
-        return True
+        policy = self.get_object()
+        if self.request.user == policy.organization:
+            return True
+        return False
+

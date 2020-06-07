@@ -1,23 +1,26 @@
 {% extends "base.html" %}
     {% block content%}
-    <div class="auth-container">
-        <div class="card">
-            <header class="auth-header">
-                <h1 class="auth-title">
-                   Register
-                </h1>
-            </header>
-            <div class="auth-content">
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                   <center><button class="btn-lg" >Register</button></center>
-                </form>
-                <div class="text-center">
-                    <br>Already registered? <a href="{% url 'login' %}">Login</a>
+    <div class="cloudini-card" >
+        <div class="card-block cloudini-center-text ">
+            <div class="auth-container">
+                <div class="card">
+                    <header class="auth-header">
+                        <h1 class="auth-title">
+                           Register
+                        </h1>
+                    </header>
+                    <div class="auth-content">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div align="center"><button class="btn-lg btn-primary" >Register</button></div>
+                        </form>
+                        <div class="text-center">
+                            <br>Already registered? <a href="{% url 'login' %}">Login</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     {% endblock content %}
