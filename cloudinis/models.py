@@ -4,6 +4,13 @@ from django.conf import settings
 from accounts.models import CloudiniUser
 from django.urls import reverse
 
+
+class Organization(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
 class Policy(models.Model):
     name = models.CharField(max_length=200)
     affectedResources = ArrayField(models.CharField(max_length=200))
@@ -13,7 +20,7 @@ class Policy(models.Model):
 
 
 class ActivatedPolicy(models.Model):
-    organization = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     affectedResource = models.CharField(max_length=200)
     metadata = ArrayField(models.CharField(max_length=200))
