@@ -5,8 +5,9 @@ from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from cloudinis.models import *
 import sys
+import re
 
-######NEEDED TO BE FIXED!!!!
+# TODO - should support every resource
 
 def NamingPolicy(activatedPolicy):
     response = clientApply("ec2", "describe_instances")
@@ -14,7 +15,9 @@ def NamingPolicy(activatedPolicy):
     if not response == []:
         for reservations in response["Reservations"]:
             for instance in reservations["Instances"]:
-                    if not instance['State']['Name'] == 'terminated':
+                if not instance['State']['Name'] == 'terminated':
+                    for tag in instance["Tags"]:
+                        if re.search(str(activatedPolicy.metadata), tag["Key"]):
 #--------------------------------------------------------------------------------------
-                        validator("InstanceId", instance, activatedPolicy)
+                            validator("InstanceId", instance, activatedPolicy)
     return "Finished succesfully"
