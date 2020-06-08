@@ -22,7 +22,3 @@ def TagEnforcementEC2(activatedPolicy):
             except KeyError:
                 None
     return "Finished succesfully"
-
-
-
-

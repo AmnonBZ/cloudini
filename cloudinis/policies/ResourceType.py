@@ -1,43 +1,80 @@
-from cloudinis.models import *
+from cloudinis.Policies.clientApply import *
+from cloudinis.Policies.validator import *
 import boto3
+from datetime import datetime
+from django.core.exceptions import ObjectDoesNotExist
+from cloudinis.models import *
+import sys
+
+def ResourceType(activatedPolicy):
+    response = clientApply("ec2", "describe_instances")
+# --------------------------------------------------------------------------------------------
+    for reservation in response["Reservations"]:
+        for instance in reservation["Instances"]:
+# --------------------------------------------------------------------------------------
+            if instance["InstanceType"] not in activatedPolicy.metadata:
+                validator("InstanceId", instance, activatedPolicy)
+#TODO add if terminated
+    return "Finished succesfully"
 
 
-# Currently - only applies to EC2
-
-def ResourceType(customer, policy):
-    # regionList = ["us-east-2", "us-east-1", "us-west-1", "us-west-2", "ap-east-1", "ap-south-1", "ap-northeast-3", "ap-northeast-2", "ap-southeast-1", "ap-southeast-2", "ap-northeast-1", "ca-central-1", "eu-central-1", "eu-west-1", "eu-west-2", "eu-west-3", "eu-north-1", "me-south-1", "sa-east-1"]
-    regionList = ["us-east-1"]
-    invalid = []
-
-    for region in regionList:
-
-        client = boto3.client('ec2', region_name=region)
-        response = client.describe_instances()
-
-        for reservation in response["Reservations"]:
-            for instance in reservation["Instances"]:
-                invalid.append(instance['InstanceType'])
-
-        return invalid
 
 
-    #     try:
-    #         activated_policies = ActivatedPolicy.objects.get(customer=customer, policy=policy)
-    #     except ActivatedPolicy.DoesNotExist:
-    #         activated_policies = None
-    #     instanceKeys = []
-    #     client = boto3.client('ec2', region_name=region)
-    #     response = client.describe_instances()
+
+
+
+
+
+
+    # regionList = ["us-east-1"]
+    # try:
+    #     for region in regionList:
+    #         client = boto3.client('ec2', region_name="us-east-1", aws_access_key_id="ASIARZNQPU7KUL3QKR4O",
+    #                               aws_secret_access_key="lmEAu76UwkbkPrZ+dfjV6buxuUsqd2/U3/8OCiLP",
+    #                               aws_session_token="FwoGZXIvYXdzEA0aDKXGWuYpBgO/tgr32iLDAaNGMA4Sh62RdWI4ufO/1ohRvdsIPDF5H5jaJOzpE/AotX1hH7dK6hRN5xvpABDp+S0g3zRlgHqEfuseCtgUZRMgsd+xGt2YPL+ssVOL10nz7djFJBYhZCU37iLQqSl6OCWzP/fySdCJPhJYz+F7+k01rJxXVyrcm1D5Zgdm92WkK8ERm0f//6eymjv2m1q711aYcAkirloarlZzmKDDM3VjeIsaldAn3DXLkmuXd46iuGNqtNNYVdnVjyEWq9NoEU4e0Sjih+r1BTIt+8hu5M1vKHILbw/OW1aaSPInR/WcNiEPIFmPdj8r9XRq4Gjbu97K5S+E3jZn")
+    #         response = client.describe_instances()
+    #         for reservation in response["Reservations"]:
+    #             for instance in reservation["Instances"]:
+    #                 try:
+    #                     try:
+    #                         validator = Violation.objects.get(connectedPolicy=activatedPolicy,
+    #                                                           resourceName=instance["InstanceType"])
+    #                         if validator:
+    #                             validator.isChecked = True
+    #                             validator.isFixed = False
+    #                             validator.save()
+    #                         else:
+    #                             Violation.objects.create(connectedPolicy=activatedPolicy,
+    #                                                      resourceName=instance["InstanceType"],
+    #                                                      date=datetime.now().strftime("%F %H:%M:%S"),
+    #                                                      isChecked=True,
+    #                                                      isFixed=False)
     #
-    #     for reservation in response["Reservations"]:
-    #         for instance in reservation["Instances"]:
-    #             try:
-    #                 for type in instance["Tags"]:
-    #                     instanceKeys.append(type["Key"])
+    #                     except ObjectDoesNotExist:
+    #                         Violation.objects.create(connectedPolicy=activatedPolicy,
+    #                                                  resourceName=instance["InstanceType"],
+    #                                                  date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
+    #                                                  isFixed=False)
     #
-    #                 if not set(activated_policies.metadata).issubset(set(instanceKeys)):
-    #                     invalid.append(instance["InstanceType"])
-    #             except KeyError:
-    #                 invalid.append(instance["InstanceType"])
+    #                 except KeyError:
+    #                     try:
+    #                         validator = Violation.objects.get(connectedPolicy=activatedPolicy,
+    #                                                           resourceName=instance["InstanceId"])
+    #                         if validator:
+    #                             validator.isChecked = True
+    #                             validator.isFixed = False
+    #                             validator.save()
+    #                         else:
+    #                             Violation.objects.create(connectedPolicy=activatedPolicy,
+    #                                                      resourceName=instance["InstanceId"],
+    #                                                      date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
+    #                                                      isFixed=False)
     #
-    # return invalid
+    #                     except ObjectDoesNotExist:
+    #                         Violation.objects.create(connectedPolicy=activatedPolicy, resourceName=instance["InstanceId"],
+    #                                                  date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True,
+    #                                                  isFixed=False)
+    # except:
+    #     return sys.exc_info()
+    #
+    # return "Finished succesfully"
