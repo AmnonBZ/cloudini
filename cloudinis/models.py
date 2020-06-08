@@ -4,6 +4,19 @@ from django.conf import settings
 from accounts.models import CloudiniUser
 from django.urls import reverse
 
+class Organization(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        CloudiniUser.objects.create(username="admin", password="changeme", organization=self.name,
+                                    email="admin@{organization}.com".format(organization=self.name),
+                                    access_key="changeme", secret_key="changeme", session_token="changeme")
+        super().save(*args, **kwargs)
+
+
 class Policy(models.Model):
     name = models.CharField(max_length=200)
     affectedResources = ArrayField(models.CharField(max_length=200))
