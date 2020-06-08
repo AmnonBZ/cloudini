@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CloudiniUser
+from django import forms
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -21,3 +22,11 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CloudiniUser
         fields = ('username', 'email',)
+
+
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = CloudiniUser
+        fields = ['username', 'email','access_key', 'secret_key','session_token']

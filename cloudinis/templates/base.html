@@ -27,12 +27,14 @@
                                 </a>
                                 <div class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1">
                                     {% if user.is_authenticated %}
-                                     <p class="lead">{{ user.username }}</p>
+                                   <div class="text-center">
+                                   <div style = "border-bottom: 1px solid #d7dde4">
+                                       <h5><strong>{{ user.username }}</strong></h5>
+
+                                   </div>
+                                   </div>
                                     <a class="dropdown-item" href="{% url 'profile' %}">
                                         <i class="fa fa-user icon"></i> Profile </a>
-                                    <a class="dropdown-item" href=#">
-                                        <i class="fa fa-gear icon"></i> Settings </a>
-                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'logout' %}">
                                         <i class="fa fa-power-off icon"></i> Logout </a>
                                     {% else %}
@@ -51,10 +53,14 @@
 {#            <img src = {% static 'pictures/home_pic.png' %} width="100%" height=auto> </img>#}
             <article class="content dashboard-page">
                     <section class="section">
-                        <div class="row sameheight-container">
+{#                        <div class="row sameheight-container">#}
 
-                <div>{% block content %}{% endblock %}</div>
-                        </div>
+                <div>
+                {% block content %}
+                {% endblock %}
+                </div>
+
+{#                        </div>#}
                     </section>
             </article>
 
@@ -69,19 +75,69 @@
                         </div>
                         <nav class="menu">
                             <ul class="sidebar-menu metismenu" id="sidebar-menu">
-                                <li class="active">
-                                    <a href="{% url 'home' %}">
-                                        <i class="fa fa-home"></i> Dashboard </a>
-                                </li>
-                                <li>
-                                        <a href="{% url 'view_policies' %}"></i> View Policies </a>
-                                </li>
-                                <li>
-                                        <a href="{% url 'policies' %}"></i> Policies </a>
-                                </li>
-                                 <li>
-                                        <a href="{% url 'violations' %}"></i> Violations </a>
-                                </li>
+
+                                {% if user.is_authenticated %}
+                                    {% url 'home' as home_url %}
+                                        <li {% if request.get_full_path == home_url %}class="active"{% endif %} >
+                                            <a href="{% url 'home' %}">
+                                                <i class="fa fa-home"></i> Dashboard </a>
+                                        </li>
+
+                                    {% url 'view_policies' as view_policies_url %}
+                                        <li {% if request.get_full_path == view_policies_url %}class="active"{% endif %} >
+                                                <a href="{% url 'view_policies' %}"></i> View Policies </a>
+                                        </li>
+
+                                    {% url 'policies' as policies_url %}
+                                    {% url 'new_policy' as new_policy_url %}
+                                        <li {% if request.get_full_path == policies_url  or request.get_full_path == new_policy_url%} class="active"{% endif %}>
+                                        <a href="#"> Policies <i class="fa arrow"></i></a>
+                                            <ul
+                                                {% if request.get_full_path == policies_url  or request.get_full_path == new_policy_url%}
+                                                class="sidebar-nav collapse in"
+                                                {% else %}
+                                                class="sidebar-nav"
+                                                {% endif %}>
+
+                                                <li {% if request.get_full_path == policies_url %}class="active"{% endif %} >
+                                                        <a href="{% url 'policies' %}"></i> My Policies </a>
+                                                </li>
+
+                                                <li {% if request.get_full_path == new_policy_url %}class="active"{% endif %}>
+                                                        <a href="{% url 'new_policy' %}"></i> New Policy </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                    {% url 'violations' as violations_url %}
+                                         <li {% if request.get_full_path == violations_url %}class="active"{% endif %} >
+                                                <a href="{% url 'violations' %}"></i> Violations </a>
+                                        </li>
+
+                                    {% url 'about' as about_url %}
+                                        <li {% if request.get_full_path == about_url %}class="active"{% endif %} >
+                                                <a href="{% url 'about' %}"></i> About Us </a>
+                                        </li>
+
+                                {% else %}
+
+                                     {% url 'login' as login_url %}
+                                        <li {% if request.get_full_path == login_url %}class="active"{% endif %}>
+                                            <a href="{% url 'login' %}"></i> Login </a>
+                                        </li>
+
+                                     {% url 'register' as register_url %}
+                                        <li {% if request.get_full_path == register_url %}class="active"{% endif %}>
+                                            <a href="{% url 'register' %}"></i> Register </a>
+                                        </li>
+
+                                     {% url 'about' as about_url %}
+                                        <li {% if request.get_full_path == about_url %}class="active"{% endif %}>
+                                                <a href="{% url 'about' %}"></i> About Us </a>
+                                        </li>
+                                {% endif %}
+
+
                             </ul>
                         </nav>
                     </div>
@@ -95,10 +151,29 @@
                     <div>© 2020 Cloudini. All Rights Reserved. </div>
 
                 </footer>
-
+{#<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>#}
+        <script src="{% static 'js/chartscore.js' %}"></script>
         <script src="{% static 'js/vendor.js' %}"></script>
         <script src="{% static 'js/app.js' %}"></script>
+        <script src="{% static 'js/charts.js' %}"></script>
 
+
+
+<script>
+     $(function() {
+    // for bootstrap 3 use 'shown.bs.tab', for bootstrap 2 use 'shown' in the next line
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        // save the latest tab; use cookies if you like 'em better:
+        localStorage.setItem('lastTab', $(this).attr('href'));
+    });
+
+    // go to the latest tab, if it exists:
+    var lastTab = localStorage.getItem('lastTab');
+    if (lastTab) {
+        $('[href="' + lastTab + '"]').tab('show');
+    }
+});
+ </script>
             </div></div>
     </body>
 </html>

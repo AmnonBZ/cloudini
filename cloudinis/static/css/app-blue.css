@@ -32,7 +32,17 @@ body {
   position: absolute;
   height: 100%;
   overflow-y: auto;
-  overflow-x: hidden; }
+  /*changed from hidden to auto*/
+  overflow-x: auto; }
+
+.cloudini-main-wrapper {
+  width: 80%;
+  position: absolute;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
 
 #ref .color-primary {
   color: #52BCD3; }
@@ -74,7 +84,9 @@ body {
     text-align: center;
     border-bottom: 1px solid #52BCD3; }
   .auth-container .auth-title {
-    color: #97A4B1;
+    /*changed
+    color: #97A4B1;*/
+    color: #2a6872;
     padding: 20px;
     line-height: 30px;
     /*font-size: 26px;*/
@@ -120,7 +132,9 @@ body {
           box-shadow: 0 0 3px #ccc;
   -webkit-transition: left 0.3s ease, padding-left 0.3s ease;
   transition: left 0.3s ease, padding-left 0.3s ease;
-  overflow: hidden; }
+
+  /* changed from hidden to auto*/
+  overflow: auto; }
   .app .content {
     padding: 95px 20px 75px 20px;
     min-height: 100vh; }
@@ -1353,7 +1367,12 @@ a:not(.btn) {
   -webkit-transition: initial;
   transition: initial;
   text-decoration: underline;
-  color: #969696; }
+  /*changed
+  color: #969696; */
+  color: #1a345a;
+
+
+}
   a:not(.btn):hover {
     text-decoration: underline;
     color: #33aec9; }
@@ -1398,17 +1417,25 @@ span a {
   padding: 5px; }
 
 .nav.nav-pills .nav-item .nav-link {
-  text-decoration: none; }
+  text-decoration: none;
+}
   .nav.nav-pills .nav-item .nav-link:hover {
-    color: #4f5f6f;
-    background-color: transparent;
+    /*changed
+    color: #4f5f6f;*/
+    color: #000000;
+    /*changed background-color: transparent;*/
+    background-color: #347585;
     border: 0; }
   .nav.nav-pills .nav-item .nav-link.active {
     border-color: #52BCD3;
     border-bottom-color: transparent;
-    background-color: #52BCD3; }
+    /*changed
+    background-color: #52BCD3;*/
+    background-color: #347585; }
     .nav.nav-pills .nav-item .nav-link.active:hover {
-      background-color: #52BCD3;
+      /*changed
+      background-color: #52BCD3;*/
+      background-color: #173339;
       color: #ffffff; }
 
 .modal-body.modal-tab-container {
@@ -2397,7 +2424,9 @@ pre {
       padding: 5px; } }
 
 .sidebar {
+
   background-color: #3a4651;
+
   width: 240px;
   padding-bottom: 60px;
   position: absolute;

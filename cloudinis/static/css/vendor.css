@@ -8563,17 +8563,44 @@ pre code {
   padding-left: 0;
 }
 
+.cloudini-chart-container {
+  width: 1000px;
+  height:600px
+}
+
 .cloudini{
   position: relative;
 }
 .cloudini-card {
     position: relative;
     min-width: 1100px;
+    min-height: 600px;
+    top: auto;
+    height: auto;
+    width: auto;
+    overflow: auto;
+
+}
+
+.cloudini-profile-card {
+    position: relative;
+    min-width: 700px;
+    min-height: 300px;
+    top: auto;
+    height: auto;
+    width: auto;
+    overflow: auto;
+
+}
+
+.cloudini-card-create-policy {
+    position: relative;
+    min-width: 1100px;
     min-height: 700px;
     top: auto;
     height: auto;
     width: auto;
-    overflow: scroll;
+    overflow: auto;
 
 }
 
@@ -8586,8 +8613,6 @@ pre code {
 .cloudini-center-text {
   display: inline-block;
   margin: 0 auto;
-}
-
 }
 .cloudini-div-title {
   position: relative;
@@ -9566,6 +9591,8 @@ pre code {
   padding: 0.75rem;
   vertical-align: top;
   border-top: 1px solid #dee2e6;
+  /*changed added max-width*/
+  max-width: 20px;
 }
 
 .table thead th {
@@ -9588,7 +9615,9 @@ pre code {
 
 .table-bordered th,
 .table-bordered td {
-  border: 1px solid #dee2e6;
+  /*changed*/
+  /*border: 1px solid #dee2e6;*/
+  border: 1px solid #41889e;
 }
 
 .table-bordered thead th,
@@ -9811,7 +9840,9 @@ pre code {
 
 .table .thead-light th {
   color: #495057;
-  background-color: #e9ecef;
+  /*changed backgroud
+  background-color: #e9ecef;*/
+  background-color: #5ddcf6;
   border-color: #dee2e6;
 }
 
