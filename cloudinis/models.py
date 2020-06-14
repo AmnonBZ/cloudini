@@ -12,13 +12,14 @@ class Organization(models.Model):
 
     def save(self, *args, **kwargs):
         CloudiniUser.models.objects.create(username="admin", password="changeme", organization=self.id,
-                                    email="admin@{organization}.com".format(organization=self.name),
+                                    email="admin@{organization}.com".format(organization=self.name), isAdmin=True,
                                     access_key="changeme", secret_key="changeme", session_token="changeme")
         super().save(*args, **kwargs)
 
 
 class CloudiniUser(AbstractUser, models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=None, null=True)
+    isAdmin = models.BooleanField(default=False)
     access_key = models.CharField(max_length=20)
     secret_key = models.CharField(max_length=50)
     session_token = models.CharField(max_length=400)
