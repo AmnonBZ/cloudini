@@ -1,10 +1,11 @@
 from django.urls import path
 from . import views
+from django.contrib.auth.views import LoginView, LogoutView
 from .views import (
     PolicyListView,
     PolicyCreateView,
     PolicyDeleteView,
-    PolicyUpdateView
+    PolicyUpdateView,
 )
 
 urlpatterns = [
@@ -21,5 +22,11 @@ urlpatterns = [
     path('policies', PolicyListView.as_view(), name='policies'),
     path('policies/<int:pk>/delete/', PolicyDeleteView.as_view(), name='delete_policy'),
     path('policies/<int:pk>/update/', PolicyUpdateView.as_view(), name='update_policy'),
+
+    path('login/', LoginView.as_view(), name="login"),
+    path('register/', views.register, name="register"),
+    path('logout/', LogoutView.as_view(next_page="login"), name="logout"),
+    path('update_profile/', views.update_profile, name="update_profile"),
+    path('profile/', views.profile, name="profile")
 
 ]

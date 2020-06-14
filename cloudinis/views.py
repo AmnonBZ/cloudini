@@ -1,7 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required
 from .models import *
 from django.http import HttpResponse
 from cloudinis.Policies.scan import *
@@ -12,10 +10,15 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
+from django.shortcuts import render, redirect
+from .forms import CustomUserCreationForm, UserUpdateForm
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django import forms
 
 
-@login_required(login_url='/accounts/')
+@login_required(login_url='/login/')
 def home(request):
     policies = Policy.objects.all()
     context = {
@@ -41,7 +44,7 @@ def about(request):
     return render(request, 'about.html')
 
 
-# @login_required(login_url='/accounts/')
+# @login_required(login_url='/login/')
 # def policies(request):
 #     try:
 #         policiesList = ActivatedPolicy.objects.all().filter(organization=request.user.id)
@@ -120,3 +123,45 @@ class PolicyDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return True
         return False
 
+
+def register(request):
+    if request.method == 'POST':
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            new_user = form.save()
+            new_user.is_active = False
+            new_user.save()
+            return HttpResponse("<h1>Thanks for registering, Cloudinis's team will contact you soon</h1>")
+    else:
+        form = CustomUserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
+
+
+@login_required
+def profile(request):
+    context = {
+        'myuser' : request.user,
+    }
+
+    return render(request, 'registration/profile.html', context)
+
+
+@login_required
+def update_profile(request):
+    if request.method == 'POST':
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+
+        if user_form.is_valid() :
+            user_form.save()
+            messages.success(request, f'Your account has been updated successfully !')
+            return redirect('profile')
+
+    else:
+        user_form = UserUpdateForm(instance=request.user)
+
+    context = {
+        'form': user_form,
+        'myuser' : request.user,
+    }
+
+    return render(request, 'registration/update_profile.html', context)

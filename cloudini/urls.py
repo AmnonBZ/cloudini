@@ -20,7 +20,6 @@ urlpatterns = [
     path('', include('cloudinis.urls')),
     path('admin/', admin.site.urls),
     path('', include('cloudinis.urls')),
-    path('accounts/', include('accounts.urls')),
     path('api/', include('api.urls')),
     path('api-auth/', include('rest_framework.urls'))
 ]
