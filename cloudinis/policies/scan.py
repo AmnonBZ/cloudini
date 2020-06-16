@@ -5,7 +5,7 @@ from .VolumeEncryptionEC2 import VolumeEncryptionEC2
 from .TagEnforcementS3 import TagEnforcementS3
 from .ResourceType import ResourceType
 from .AttachedVolumes import AttachedVolumes
-from .remediator import deleteme
+from .remediator import *
 from .NamingPolicy import NamingPolicy
 from .TagEnforcementEC2 import TagEnforcementEC2
 from .ResourceLocationS3 import ResourceLocationS3
@@ -57,15 +57,18 @@ def scan_for_violations(organization):
                     violation.isChecked = True
                     violation.fixedDate = datetime.now().strftime("%F %H:%M:%S")
                     violation.save()
-                #print(str(activatedPolicy.actionItem)[2:-2])
-                if str(activatedPolicy.actionItem)[2:-2] == "deleteme":
-                    deleteme(violation.resourceName, "instance")
-                if str(activatedPolicy.actionItem)[2:-2] == "notify":
-                    print("notify.....")
-            #notify()
+
+
+                if (violation.isChecked is True) and (violation.isFixed is False):
+                    if str(activatedPolicy.actionItem)[2:-2] == "deleteme":
+                        deleteme(violation.resourceName, "instance")
+                    if str(activatedPolicy.actionItem)[2:-2] == "sms":
+                        sms(violation.resourceName, "instance")
+                    if str(activatedPolicy.actionItem)[2:-2] == "email":
+                        email(violation.resourceName, "instance")
+
                 else:
                     None
-                    #todo Couldnt fix by myself :: if activatedPolicy.actionItem == "deleteme"
                     #the problem :: .actionItem is not recognized by the system
 
     return output
