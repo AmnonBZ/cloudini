@@ -16,8 +16,11 @@ def NamingPolicy(activatedPolicy):
         for reservations in response["Reservations"]:
             for instance in reservations["Instances"]:
                 if not instance['State']['Name'] == 'terminated':
-                    for tag in instance["Tags"]:
-                        if re.search(str(activatedPolicy.metadata), tag["Key"]):
+                    try:
+                        for tag in instance["Tags"]:
+                            if re.search(str(activatedPolicy.metadata), tag["Value"]):
 #--------------------------------------------------------------------------------------
-                            validator("InstanceId", instance, activatedPolicy)
+                                validator("InstanceId", instance, activatedPolicy)
+                    except KeyError:
+                        None
     return "Finished succesfully"

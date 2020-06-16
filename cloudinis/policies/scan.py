@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from cloudinis.models import *
 from .ResourceLocationEC2 import ResourceLocationEC2
 from .VolumeEncryptionEC2 import VolumeEncryptionEC2
@@ -58,11 +57,11 @@ def scan_for_violations(organization):
                     violation.isChecked = True
                     violation.fixedDate = datetime.now().strftime("%F %H:%M:%S")
                     violation.save()
-
-                if activatedPolicy.actionItem == "deleteme":
+                #print(str(activatedPolicy.actionItem)[2:-2])
+                if str(activatedPolicy.actionItem)[2:-2] == "deleteme":
                     deleteme(violation.resourceName, "instance")
-                if activatedPolicy.actionItem == "notify":
-                    print("skipping")
+                if str(activatedPolicy.actionItem)[2:-2] == "notify":
+                    print("notify.....")
             #notify()
                 else:
                     None
