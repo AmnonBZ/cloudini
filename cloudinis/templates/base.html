@@ -10,6 +10,7 @@
         <!-- Place favicon.ico in the root directory -->
         <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'css/app-blue.css' %}">
+
     </head>
     <body>
         <div class="main-wrapper">
@@ -29,19 +30,19 @@
                                     {% if user.is_authenticated %}
                                    <div class="text-center">
                                    <div style = "border-bottom: 1px solid #d7dde4">
-                                       <h5><strong>{{ user.username }}</strong></h5>
+                                       <h6><strong>{{ user.username }}</strong></h6>
 
                                    </div>
                                    </div>
                                     <a class="dropdown-item" href="{% url 'profile' %}">
                                         <i class="fa fa-user icon"></i> Profile </a>
+                                    <a class="dropdown-item" href="{% url 'change_password' %}">
+                                        <i class="fa fa-user icon"></i> Change Password </a>
                                     <a class="dropdown-item" href="{% url 'logout' %}">
                                         <i class="fa fa-power-off icon"></i> Logout </a>
                                     {% else %}
                                     <a class="dropdown-item" href="{% url 'login' %}">
                                         <i class="fa fa-user icon"></i> Login </a>
-                                    <a class="dropdown-item" href="{% url 'register' %}">
-                                        <i class="fa fa-user icon"></i> Register </a>
 
                                     {% endif %}
                                 </div>
@@ -50,7 +51,6 @@
                     </div>
                 </header>
 
-{#            <img src = {% static 'pictures/home_pic.png' %} width="100%" height=auto> </img>#}
             <article class="content dashboard-page">
                     <section class="section">
 {#                        <div class="row sameheight-container">#}
@@ -82,6 +82,13 @@
                                             <a href="{% url 'home' %}">
                                                 <i class="fa fa-home"></i> Dashboard </a>
                                         </li>
+                                {% if user.isAdmin == True %}
+
+                                    {% url 'register' as register_url %}
+                                        <li {% if request.get_full_path == register_url %}class="active"{% endif %} >
+                                                <a href="{% url 'register' %}"></i> Register User </a>
+                                        </li>
+                                {% endif %}
 
                                     {% url 'view_policies' as view_policies_url %}
                                         <li {% if request.get_full_path == view_policies_url %}class="active"{% endif %} >
@@ -103,9 +110,11 @@
                                                         <a href="{% url 'policies' %}"></i> My Policies </a>
                                                 </li>
 
+                                            {% if user.isAdmin == True %}
                                                 <li {% if request.get_full_path == new_policy_url %}class="active"{% endif %}>
                                                         <a href="{% url 'new_policy' %}"></i> New Policy </a>
                                                 </li>
+                                            {% endif %}
                                             </ul>
                                         </li>
 
@@ -126,9 +135,9 @@
                                             <a href="{% url 'login' %}"></i> Login </a>
                                         </li>
 
-                                     {% url 'register' as register_url %}
-                                        <li {% if request.get_full_path == register_url %}class="active"{% endif %}>
-                                            <a href="{% url 'register' %}"></i> Register </a>
+                                     {% url 'register_org' as register_org_url %}
+                                        <li {% if request.get_full_path == register_org_url %}class="active"{% endif %}>
+                                            <a href="{% url 'register_org' %}"></i> Register Organization</a>
                                         </li>
 
                                      {% url 'about' as about_url %}
@@ -152,11 +161,17 @@
 
                 </footer>
 {#<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>#}
+
         <script src="{% static 'js/chartscore.js' %}"></script>
         <script src="{% static 'js/vendor.js' %}"></script>
         <script src="{% static 'js/app.js' %}"></script>
-        <script src="{% static 'js/charts.js' %}"></script>
+        <script type="text/javascript">
+            var data11= {{data1 |safe }};
+            var data22= {{data2 |safe }};
+            var labels22= {{labels2|safe }};
+        </script>
 
+        <script src="{% static 'js/charts.js' %}"></script>
 
 
 <script>

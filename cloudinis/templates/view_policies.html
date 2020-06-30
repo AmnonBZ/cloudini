@@ -38,19 +38,11 @@
                             {% for resource in resources %}
                                 <div class="tab-pane fade" id="{{resource}}" >
                                    <table class="table  table-hover " >
-{#                                        <thead class="thead-light">#}
-{#                                            <tr>#}
-{#                                                <th></th>#}
-{#                                                <th>Policy Name</th>#}
-{#                                                <th>Description</th>#}
-{#                                            </tr>#}
-{#                                        </thead>#}
                                     <tbody>
 
                                        {% for  policy in all_policies %}
                                            {%  if resource in policy.affectedResources %}
                                                 <tr>
-{#                                                    <th scope="row"></th>#}
                                                     <th>{{ policy.name }}</th>
                                                     <th>{{ policy.description }}</th>
                                                 </tr>

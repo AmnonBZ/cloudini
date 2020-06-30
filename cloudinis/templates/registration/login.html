@@ -1,6 +1,15 @@
 {% extends "base.html" %}
     {% block content%}
+
+
     <div class="cloudini-card" >
+    {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }} ">
+                {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
         <div class="card-block cloudini-center-text ">
             <div class="auth-container text-center">
                 <div class="card">
@@ -15,7 +24,7 @@
                             {{ form.as_p }}
                           <div align="center"><button class="btn-lg btn-primary" >Login</button></div>
                         </form>
-                        <br>Don't have a user yet? <a href="{% url 'register' %}">Register</a>
+                        <br>Don't have organization yet? <a href="{% url 'register_org' %}">Register</a>
                     </div>
                 </div>
             </div>

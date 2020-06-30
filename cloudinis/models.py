@@ -2,19 +2,31 @@ from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.conf import settings
 from django.urls import reverse
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 
 class Organization(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        CloudiniUser.models.objects.create(username="admin", password="changeme", organization=self.id,
+        my_user = CloudiniUser.objects.create_user(username="admin_"+self.name, password="changeme",
                                     email="admin@{organization}.com".format(organization=self.name), isAdmin=True,
                                     access_key="changeme", secret_key="changeme", session_token="changeme")
+
+        my_group = Group.objects.get(name='org_admins')
+        my_user.groups.add(my_group)
         super().save(*args, **kwargs)
+        my_user.organization = self
+        my_user.save()
+
+
+
+    def get_absolute_url(self):
+        return reverse('profile')
+
+
 
 
 class CloudiniUser(AbstractUser, models.Model):
@@ -40,7 +52,7 @@ class Policy(models.Model):
 
 
 class ActivatedPolicy(models.Model):
-    organization = models.ForeignKey(CloudiniUser, on_delete=models.CASCADE)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=None, null=True)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     affectedResource = models.CharField(max_length=200 ,  verbose_name="Resource")
     metadata = ArrayField(models.CharField(max_length=200,),verbose_name="What to enforce")

@@ -29,3 +29,4 @@ class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = CloudiniUser
         fields = ['username', 'email','access_key', 'secret_key','session_token']
+
