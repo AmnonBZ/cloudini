@@ -129,7 +129,10 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/'
 AUTH_USER_MODEL = 'cloudinis.CloudiniUser'
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES' : ('rest_framework.permissions.IsAuthenticated',)
 }
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'

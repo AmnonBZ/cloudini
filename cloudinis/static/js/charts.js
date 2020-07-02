@@ -6,8 +6,8 @@ var myChart = new Chart(ctx1, {
     data: {
         labels: ['Fixed', 'Not Fixed'],
         datasets: [{
-            label: '# of Votes',
-            data: [20, 9],
+           // data: [20, 9],
+            data:data11,
             backgroundColor: [
                 'rgba(0,255,127, 0.8)',
                 'rgba(255, 99, 132, 0.8)',
@@ -35,10 +35,12 @@ var ctx2 = document.getElementById('chart2').getContext('2d');
 var myChart = new Chart(ctx2, {
     type: 'bar',
     data: {
-        labels: ['PolicyA', 'PolicyB', 'PolicyC', 'PolicyD', 'PolicyE', 'PolicyF', 'PolicyG', 'PolicyH'],
+        // labels: ['PolicyA', 'PolicyB', 'PolicyC', 'PolicyD', 'PolicyE', 'PolicyF', 'PolicyG', 'PolicyH'],
+        labels:labels22,
         datasets: [{
             label: 'my policies',
-            data: [3, 4, 80, 0, 105, 40, 50,10],
+            // data: [3, 4, 80, 0, 105, 40, 50,10],
+            data: data22,
             backgroundColor: 'rgb(73,180,192)',
             borderColor: 'rgb(54,99,146)',
             borderWidth: 1

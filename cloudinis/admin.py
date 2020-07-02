@@ -5,7 +5,7 @@ from .models import *
 
 admin.site.site_header = 'Cloudini Administration Panel'
 
-UserAdmin.list_display = ('username', 'email', 'date_joined', 'is_active', 'is_staff')
+UserAdmin.list_display = ('username', 'email', 'date_joined', 'is_active', 'is_staff', 'isAdmin')
 
 class PolicyDisplay(admin.ModelAdmin):
     list_display = ('name', 'affectedResources')
@@ -24,4 +24,4 @@ admin.site.register(Policy, PolicyDisplay)
 admin.site.register(ActivatedPolicy, ActivatedPolicyDisplay)
 admin.site.register(Violation, ViolationDisplay)
 
-admin.site.unregister(Group)
+#admin.site.unregister(Group)
