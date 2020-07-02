@@ -1,62 +1,37 @@
 {% extends "base.html" %}
-{% block content %}
-        <div class="row title-block cloudini-div-title">
-            <h3 class=" title cloudini-center-text"> View Policies </h3>
+
+{% block content%}
+
+<div class="row title-block cloudini-div-title">
+    <h3 class=" title cloudini-center-text"> Policies </h3>
+</div>
+
+
+<div class="cloudini-card" >
+    <div class="cloudini-card card sameheight-item " >
+        <div class="card-block ">
+        <div class="card-title-block" >
+       <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Affected Resources</th>
+                <th scope="col">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for policy in policies %}
+                <tr>
+                <th scope="row">{{ policy.name }}</th>
+                <th>{{ policy.affectedResources }}</th>
+                <th>{{ policy.description }}</th>
+            {% endfor %}
+          </tbody>
+        </table>
         </div>
-    <div class="cloudini">
-            <div  class="cloudini-card" >
-                <div class="cloudini-card card sameheight-item " >
-                    <div class="card-block ">
-                        <div class="card-title-block "  >
-                          <div style="text-align: center;">
-                              <h3 class="title">All Policies </h3>
-                          </div>
-                        </div>
-                        <section class="section" >
-                        <!-- Nav tabs -->
-                        <ul class="nav nav-pills " >
-                        {% for resource in resources %}
-                            <li class="nav-item">
-                                <a href="" class="nav-link" data-target="#{{ resource }}" aria-controls="{{ resource }}" data-toggle="tab" role="tab">{{ resource }}</a>
-                            </li>
-                        {% endfor  %}
-                        </ul>
-                          <table class="table  table-hover " >
-                            <thead class="thead-light">
-                                <tr>
-{#                                    <th scope="col"></th>#}
-                                    <th scope="col" >Policy Name</th>
-                                    <th scope="col" >Description</th>
-                                </tr>
-                            </thead>
-                          </table>
-
-
-                        <!-- Tab panes -->
-                        <div class="tab-content" >
-
-                            {% for resource in resources %}
-                                <div class="tab-pane fade" id="{{resource}}" >
-                                   <table class="table  table-hover " >
-                                    <tbody>
-
-                                       {% for  policy in all_policies %}
-                                           {%  if resource in policy.affectedResources %}
-                                                <tr>
-                                                    <th>{{ policy.name }}</th>
-                                                    <th>{{ policy.description }}</th>
-                                                </tr>
-                                            {% endif %}
-                                       {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% endfor  %}
-                        </div>
-
-                        </section>
-                    </div>
-                </div>
-            </div>
+        </div>
     </div>
+</div>
+
+
 {% endblock content %}

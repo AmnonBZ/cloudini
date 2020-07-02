@@ -73,16 +73,12 @@ def home(request):
 
 def view_policies(request):
     policies = Policy.objects.all()
-    resources = ['EC2','S3','CloudWatch']
-
 
     context = {
-        'all_policies': policies,
-        'resources' : resources,
+        'policies': policies,
     }
 
     return render(request, 'view_policies.html', context)
-
 
 
 def about(request):
@@ -92,7 +88,7 @@ def about(request):
 # @login_required(login_url='/login/')
 # def policies(request):
 #     try:
-#         policiesList = ActivatedPolicy.objects.all().filter(organization=request.user.id)
+#         policiesList = ActivatedPolicy.objects.all().filter(organization=request.user.organization_id)
 #     except ValueError:
 #         policiesList = []
 #
@@ -103,20 +99,21 @@ def about(request):
 
 @login_required
 def violations(request):
-    violationsList = Violation.objects.all().filter(connectedPolicy__organization=request.user.id, isFixed=False).order_by("date")
+    violationsList = Violation.objects.all().filter(connectedPolicy__organization=request.user.organization_id, isFixed=False).order_by("date")
+    scan_status = request.user.organization.scan_status
     return render(request, 'violations.html', {
-        "violationsList": violationsList
+        "violationsList": violationsList,
+        "scan_status": scan_status
     })
 
 
 @login_required
 def scan(request):
-    x = scan_for_violations(request.user.id)
-
-    return render(request, 'scan.html', {
-        "x": x
-    })
-
+    scan_result = scan_for_violations(request.user)
+    org = Organization.objects.get(name=request.user.organization)
+    org.scan_status = scan_result
+    org.save(update_fields=['scan_status'])
+    return redirect('violations')
 
 class PolicyListView(ListView):
     model =  ActivatedPolicy

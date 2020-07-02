@@ -5,7 +5,11 @@ from .models import *
 
 admin.site.site_header = 'Cloudini Administration Panel'
 
-UserAdmin.list_display = ('username', 'email', 'date_joined', 'is_active', 'is_staff', 'isAdmin')
+UserAdmin.list_display = ('username', 'organization', 'email', 'date_joined', 'is_active', 'is_staff', 'isAdmin')
+
+class OrganizationDisplay(admin.ModelAdmin):
+    list_display = ('name', 'scan_status')
+    list_filter = ('name', 'scan_status')
 
 class PolicyDisplay(admin.ModelAdmin):
     list_display = ('name', 'affectedResources')
@@ -20,6 +24,7 @@ class ViolationDisplay(admin.ModelAdmin):
     list_filter = ('connectedPolicy', 'resourceName')
 
 admin.site.register(CloudiniUser, UserAdmin)
+admin.site.register(Organization, OrganizationDisplay)
 admin.site.register(Policy, PolicyDisplay)
 admin.site.register(ActivatedPolicy, ActivatedPolicyDisplay)
 admin.site.register(Violation, ViolationDisplay)

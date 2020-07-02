@@ -6,27 +6,39 @@ from django.contrib.auth.models import AbstractUser, Group
 
 class Organization(models.Model):
     name = models.CharField(max_length=50, unique=True)
+    scan_status = models.CharField(max_length=500, default="None")
 
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        my_user = CloudiniUser.objects.create_user(username="admin_"+self.name, password="changeme",
-                                    email="admin@{organization}.com".format(organization=self.name), isAdmin=True,
-                                    access_key="changeme", secret_key="changeme", session_token="changeme")
-
-        my_group = Group.objects.get(name='org_admins')
-        my_user.groups.add(my_group)
-        super().save(*args, **kwargs)
-        my_user.organization = self
-        my_user.save()
-
-
+        try:
+            is_exist = CloudiniUser.objects.get(username="admin_"+self.name)
+            if not is_exist:
+                my_user = CloudiniUser.objects.create_user(username="admin_"+self.name, password="changeme",
+                                            email="admin@{organization}.com".format(organization=self.name), isAdmin=True,
+                                            access_key="changeme", secret_key="changeme", session_token="changeme")
+                my_group = Group.objects.get(name='org_admins')
+                my_user.groups.add(my_group)
+                super().save(*args, **kwargs)
+                my_user.organization = self
+                my_user.save()
+            else:
+                super().save(*args, **kwargs)
+        except:
+            my_user = CloudiniUser.objects.create_user(username="admin_" + self.name, password="changeme",
+                                                       email="admin@{organization}.com".format(organization=self.name),
+                                                       isAdmin=True,
+                                                       access_key="changeme", secret_key="changeme",
+                                                       session_token="changeme")
+            my_group = Group.objects.get(name='org_admins')
+            my_user.groups.add(my_group)
+            super().save(*args, **kwargs)
+            my_user.organization = self
+            my_user.save()
 
     def get_absolute_url(self):
         return reverse('profile')
-
-
 
 
 class CloudiniUser(AbstractUser, models.Model):
@@ -41,6 +53,7 @@ class CloudiniUser(AbstractUser, models.Model):
 
     def __str__(self):
         return self.username
+
 
 class Policy(models.Model):
     name = models.CharField(max_length=40)

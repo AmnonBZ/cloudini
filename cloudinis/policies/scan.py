@@ -11,62 +11,91 @@ from .NamingPolicy import NamingPolicy
 from .TagEnforcementEC2 import TagEnforcementEC2
 from .ResourceLocationS3 import ResourceLocationS3
 from .FreeEIPs import FreeEIPs
+from .demo_query import demo_query
 
 
 
-def scan_for_violations(organization):
+def scan_for_violations(user):
 
 # Before operations
-    allViolations = Violation.objects.all()
+    allViolations = Violation.objects.all().filter(connectedPolicy__organization=user.organization_id)
     for violation in allViolations:
         violation.isChecked = False
         violation.save()
 
-
     output = ""
-    customerActivatedPolicy = ActivatedPolicy.objects.filter(organization=organization)
+    customerActivatedPolicy = ActivatedPolicy.objects.filter(organization=user.organization_id)
+
+    run = demo_query(user)
+    if run is not True:
+        return run
+
     if customerActivatedPolicy:
         for activatedPolicy in customerActivatedPolicy:
             if "AttachedVolumes" in activatedPolicy.policy.name:
-                output = AttachedVolumes(activatedPolicy)
+                run = AttachedVolumes(user, activatedPolicy)
+                if run is not True:
+                    return run
+
             if "ResourceLocationEC2" in activatedPolicy.policy.name:
-                output = ResourceLocationEC2(activatedPolicy)
+                run = ResourceLocationEC2(user, activatedPolicy)
+                if run is not True:
+                    return run
+
             if "VolumeEncryptionEC2" in activatedPolicy.policy.name:
-                output = VolumeEncryptionEC2(activatedPolicy)
+                run = VolumeEncryptionEC2(user, activatedPolicy)
+                if run is not True:
+                    return run
+
             if "ResourceType" in activatedPolicy.policy.name:
-                output = ResourceType(activatedPolicy)
+                run = ResourceType(user, activatedPolicy)
+                if run is not True:
+                    return run
+
             if "TagEnforcementS3" in activatedPolicy.policy.name:
-                output = TagEnforcementS3(activatedPolicy)
+                run = TagEnforcementS3(user, activatedPolicy)
+                if run is not True:
+                    return run
+
             if "TagEnforcementEC2" in activatedPolicy.policy.name:
-                output = TagEnforcementEC2(activatedPolicy)
+                run = TagEnforcementEC2(user, activatedPolicy)
+                if run is not True:
+                    return run
+
             if "NamingPolicy" in activatedPolicy.policy.name:
-                output = NamingPolicy(activatedPolicy)
+                run = NamingPolicy(user, activatedPolicy)
+                if run is not True:
+                    return run
+
             if "ResourceLocationS3" in activatedPolicy.policy.name:
-                output = ResourceLocationS3(activatedPolicy)
+                run = ResourceLocationS3(user, activatedPolicy)
+                if run is not True:
+                    return run
+
             if "FreeEIPs" in activatedPolicy.policy.name:
-                output = FreeEIPs(activatedPolicy)
-            if "VolumeEncryptionS3" in activatedPolicy.policy.name:
-                output = VolumeEncryptionS3(activatedPolicy)
-
-
+                run = FreeEIPs(user, activatedPolicy)
+                if run is not True:
+                    return run
+    else:
+        return "No policies applied"
 
 # After operations
-            allViolations = Violation.objects.all()
-            for violation in allViolations:
-                if (violation.isChecked is False) and (violation.isFixed is False):
-                    violation.isFixed = True
-                    violation.isChecked = True
-                    violation.fixedDate = datetime.now().strftime("%F %H:%M:%S")
-                    violation.save()
+    allViolations = Violation.objects.all().filter(connectedPolicy__organization=user.organization_id)
+    for violation in allViolations:
+        if (violation.isChecked is False) and (violation.isFixed is False):
+            violation.isFixed = True
+            violation.isChecked = True
+            violation.fixedDate = datetime.now().strftime("%F %H:%M:%S")
+            violation.save()
+#
+#         if activatedPolicy.actionItem == "deleteme":
+#             deleteme(violation.resourceName, "instance")
+#         if activatedPolicy.actionItem == "notify":
+#             print("skipping")
+#     #notify()
+#         else:
+#             None
+#             #todo Couldnt fix by myself :: if activatedPolicy.actionItem == "deleteme"
+#             #the problem :: .actionItem is not recognized by the system
 
-                if activatedPolicy.actionItem == "deleteme":
-                    deleteme(violation.resourceName, "instance")
-                if activatedPolicy.actionItem == "notify":
-                    print("skipping")
-            #notify()
-                else:
-                    None
-                    #todo Couldnt fix by myself :: if activatedPolicy.actionItem == "deleteme"
-                    #the problem :: .actionItem is not recognized by the system
-
-    return output
+    return "Finished successfully"
