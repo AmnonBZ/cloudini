@@ -1,5 +1,4 @@
 import boto3
-from .clientApply import *
 
 def deleteme(resource_id, resource_type):
     if resource_type == "instance":

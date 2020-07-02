@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser, Group
 class Organization(models.Model):
     name = models.CharField(max_length=50, unique=True)
     scan_status = models.CharField(max_length=500, default="None")
+    last_scan_time = models.DateTimeField(default=None, null=True)
 
     def __str__(self):
         return self.name

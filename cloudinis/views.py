@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib.messages.views import *
 from .models import *
 from .decorators import org_admin_only, unauthenticated_user
 from django.contrib.auth.hashers import make_password
@@ -99,11 +99,19 @@ def about(request):
 
 @login_required
 def violations(request):
-    violationsList = Violation.objects.all().filter(connectedPolicy__organization=request.user.organization_id, isFixed=False).order_by("date")
+    violationsList = Violation.objects.all().filter(connectedPolicy__organization=request.user.organization_id,
+                                                    isFixed=False).order_by("date")
     scan_status = request.user.organization.scan_status
+    last_scan_time = request.user.organization.last_scan_time
+
+    if scan_status == "Finished successfully":
+        messages.success(request, scan_status)
+    else:
+        messages.warning(request, scan_status)
+
     return render(request, 'violations.html', {
         "violationsList": violationsList,
-        "scan_status": scan_status
+        "last_scan_time": last_scan_time
     })
 
 
@@ -112,8 +120,10 @@ def scan(request):
     scan_result = scan_for_violations(request.user)
     org = Organization.objects.get(name=request.user.organization)
     org.scan_status = scan_result
-    org.save(update_fields=['scan_status'])
+    org.last_scan_time = datetime.datetime.now().strftime("%F %H:%M:%S")
+    org.save(update_fields=['scan_status', 'last_scan_time'])
     return redirect('violations')
+
 
 class PolicyListView(ListView):
     model =  ActivatedPolicy
