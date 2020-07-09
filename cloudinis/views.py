@@ -119,7 +119,7 @@ def violations(request):
 def scan(request):
     scan_result = scan_for_violations(request.user)
     org = Organization.objects.get(name=request.user.organization)
-    org.scan_status = scan_result
+    org.scan_status = scan_result[0:499]
     org.last_scan_time = datetime.datetime.now().strftime("%F %H:%M:%S")
     org.save(update_fields=['scan_status', 'last_scan_time'])
     return redirect('violations')
