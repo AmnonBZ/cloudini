@@ -1,4 +1,4 @@
-from cloudinis.Policies.validator import *
+from cloudinis.policies.validator import *
 import boto3
 import re
 

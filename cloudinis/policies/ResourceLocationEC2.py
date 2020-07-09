@@ -1,5 +1,5 @@
 import boto3
-from cloudinis.Policies.validator import *
+from cloudinis.policies.validator import *
 from botocore.exceptions import *
 
 def ResourceLocationEC2(user, activatedPolicy):

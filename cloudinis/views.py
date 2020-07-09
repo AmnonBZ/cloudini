@@ -5,7 +5,7 @@ from .models import *
 from .decorators import org_admin_only, unauthenticated_user
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
-from cloudinis.Policies.scan import *
+from cloudinis.policies.scan import *
 from django.views.generic import (
     ListView,
     DetailView,
