@@ -1,5 +1,4 @@
 from datetime import datetime
-# from django_cron import CronJobBase, Schedule
 from cloudinis.models import *
 from .ResourceLocationEC2 import ResourceLocationEC2
 from .VolumeEncryptionEC2 import VolumeEncryptionEC2
@@ -86,42 +85,10 @@ def scan_for_violations(user):
 
     return "Finished successfully"
 
+
+# implement schedule scan
 # organizations = Organization.objects.all()
 # for organization in organizations:
-#     admin_user = CloudiniUser.objects.get(username="admin_"+organization.name)
-#     schedule.every(1).minutes.do(scan_for_violations, user=admin_user)
-#
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)
-#
-# @periodic_task(run_every=timedelta(seconds=30))
-# def scan_every_minute():
-#     organizations = Organization.objects.all()
-#     for organization in organizations:
-#         admin_user = CloudiniUser.objects.get(username="admin_" + organization.name)
-#         scan_for_violations(admin_user)
+#     admin_user = CloudiniUser.objects.get(username="admin_" + organization.name)
+#     scan_for_violations(admin_user)
 
-
-# organizations = Organization.objects.all()
-# for organization in organizations:
-#     admin_user = CloudiniUser.objects.get(username="admin_"+organization.name)
-# WAIT_TIME_SECONDS = 60
-#
-# ticker = threading.Event()
-# while not ticker.wait(WAIT_TIME_SECONDS):
-#     scan_for_violations('admin_amnon3')
-
-
-
-# class ScanCronJob(CronJobBase):
-#     RUN_EVERY_MINS = 1
-#
-#     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-#     code = 'cloudini.scan_cron_job'
-#
-#     def do(self):
-#         organizations = Organization.objects.all()
-#         for organization in organizations:
-#             admin_user = CloudiniUser.objects.get(username="admin_"+organization.name)
-#             scan_for_violations(admin_user)
