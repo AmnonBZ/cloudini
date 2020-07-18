@@ -8,20 +8,20 @@ admin.site.site_header = 'Cloudini Administration Panel'
 UserAdmin.list_display = ('username', 'organization', 'email', 'date_joined', 'is_active', 'is_staff', 'isAdmin')
 
 class OrganizationDisplay(admin.ModelAdmin):
-    list_display = ('name', 'scan_status')
-    list_filter = ('name', 'scan_status')
+    list_display = ('name', 'scan_status', 'last_scan_time')
+    list_filter = ('name', 'scan_status', 'last_scan_time')
 
 class PolicyDisplay(admin.ModelAdmin):
-    list_display = ('name', 'affectedResources')
-    list_filter = ('name', 'affectedResources')
+    list_display = ('name', 'affectedResources', 'description')
+    list_filter = ('name', 'affectedResources', 'description')
 
 class ActivatedPolicyDisplay(admin.ModelAdmin):
     list_display = ('organization', 'policy', 'metadata', 'actionItem')
     list_filter = ('organization', 'policy', 'actionItem')
 
 class ViolationDisplay(admin.ModelAdmin):
-    list_display = ('connectedPolicy', 'resourceName', 'isChecked', 'isFixed')
-    list_filter = ('connectedPolicy', 'resourceName')
+    list_display = ('connectedPolicy', 'resource_id', 'isChecked', 'isFixed')
+    list_filter = ('connectedPolicy', 'resource_id')
 
 admin.site.register(CloudiniUser, UserAdmin)
 admin.site.register(Organization, OrganizationDisplay)

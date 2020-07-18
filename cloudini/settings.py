@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'cloudinis',
     'api',
     'rest_framework',
+    'django_cron',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -51,6 +52,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CRON_CLASSES = [
+    "cloudini.scan_cron_job",
+]
+
 
 ROOT_URLCONF = 'cloudini.urls'
 
@@ -136,3 +142,10 @@ REST_FRAMEWORK = {
 }
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'cloudini.donotreply@gmail.com'
+EMAIL_HOST_PASSWORD = 'SuperUser!'

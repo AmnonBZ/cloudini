@@ -1,16 +1,11 @@
 from datetime import datetime
-# import schedule
-# import time
-# from celery.schedules import crontab
-# from celery.task import periodic_task
-# from datetime import timedelta
+# from django_cron import CronJobBase, Schedule
 from cloudinis.models import *
 from .ResourceLocationEC2 import ResourceLocationEC2
 from .VolumeEncryptionEC2 import VolumeEncryptionEC2
 from .TagEnforcementS3 import TagEnforcementS3
 from .ResourceType import ResourceType
 from .AttachedVolumes import AttachedVolumes
-from .remediator import deleteme
 from .NamingPolicy import NamingPolicy
 from .TagEnforcementEC2 import TagEnforcementEC2
 from .ResourceLocationS3 import ResourceLocationS3
@@ -89,16 +84,6 @@ def scan_for_violations(user):
             violation.fixedDate = datetime.now().strftime("%F %H:%M:%S")
             violation.save()
 
-#         if activatedPolicy.actionItem == "deleteme":
-#             deleteme(violation.resourceName, "instance")
-#         if activatedPolicy.actionItem == "notify":
-#             print("skipping")
-#     #notify()
-#         else:
-#             None
-#             #todo Couldnt fix by myself :: if activatedPolicy.actionItem == "deleteme"
-#             #the problem :: .actionItem is not recognized by the system
-
     return "Finished successfully"
 
 # organizations = Organization.objects.all()
@@ -116,3 +101,27 @@ def scan_for_violations(user):
 #     for organization in organizations:
 #         admin_user = CloudiniUser.objects.get(username="admin_" + organization.name)
 #         scan_for_violations(admin_user)
+
+
+# organizations = Organization.objects.all()
+# for organization in organizations:
+#     admin_user = CloudiniUser.objects.get(username="admin_"+organization.name)
+# WAIT_TIME_SECONDS = 60
+#
+# ticker = threading.Event()
+# while not ticker.wait(WAIT_TIME_SECONDS):
+#     scan_for_violations('admin_amnon3')
+
+
+
+# class ScanCronJob(CronJobBase):
+#     RUN_EVERY_MINS = 1
+#
+#     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
+#     code = 'cloudini.scan_cron_job'
+#
+#     def do(self):
+#         organizations = Organization.objects.all()
+#         for organization in organizations:
+#             admin_user = CloudiniUser.objects.get(username="admin_"+organization.name)
+#             scan_for_violations(admin_user)

@@ -1,4 +1,3 @@
-from cloudinis.models import *
 import boto3
 from botocore.exceptions import ClientError
 

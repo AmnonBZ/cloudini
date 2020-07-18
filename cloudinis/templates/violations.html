@@ -33,7 +33,7 @@
             {% for violation in violationsList %}
                 <tr>
                 <th scope="row">{{ violation.connectedPolicy }}</th>
-                <th>{{ violation.resourceName }}</th>
+                <th>{{ violation.resource_id }}</th>
                 <th>{{ violation.date }}</th>
                 <th>{{ violation.fixedDate }}</th>
             {% endfor %}
