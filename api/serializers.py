@@ -11,4 +11,4 @@ class ActivatedPolicySerializer(serializers.ModelSerializer):
 class ViolationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Violation
-        fields = ('id', 'connectedPolicy', 'resourceName', 'date', 'isChecked', 'isFixed', 'fixedDate')
+        fields = ('id', 'connectedPolicy', 'resource_id', 'date', 'isChecked', 'isFixed', 'fixedDate')

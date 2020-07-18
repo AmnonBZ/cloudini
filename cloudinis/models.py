@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser, Group
+from django.core.mail import send_mail
+from django.conf import settings
+from cloudinis.policies.object_resources import *
+
 
 class Organization(models.Model):
     name = models.CharField(max_length=50, unique=True)
@@ -58,7 +61,7 @@ class CloudiniUser(AbstractUser, models.Model):
 
 class Policy(models.Model):
     name = models.CharField(max_length=40)
-    affectedResources = ArrayField(models.CharField(max_length=200))
+    affectedResources = models.CharField(max_length=200)
     description = models.CharField(max_length=250)
 
     def __str__(self):
@@ -68,13 +71,13 @@ class Policy(models.Model):
 class ActivatedPolicy(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=None, null=True)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
-    affectedResource = models.CharField(max_length=200 ,  verbose_name="Resource")
+    affectedResource = models.CharField(max_length=200 , verbose_name="Resource")
     metadata = ArrayField(models.CharField(max_length=200,),verbose_name="What to enforce")
     actionItem = ArrayField(models.CharField(max_length=200), verbose_name="Action item")
     resourceTagToNotify = ArrayField(models.CharField(max_length=200), verbose_name="Tag to enforce")
 
     def __str__(self):
-        return "{}-{}-{}".format(self.organization, self.policy, self.affectedResource)
+        return "{}".format(self.policy)
 
     def get_absolute_url(self):
         return reverse('policies')
@@ -82,8 +85,21 @@ class ActivatedPolicy(models.Model):
 
 class Violation(models.Model):
     connectedPolicy = models.ForeignKey(ActivatedPolicy, on_delete=models.CASCADE)
-    resourceName = models.CharField(max_length=200)
+    resource_id = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now_add=True) #TODO
     isChecked = models.BooleanField(default=False)
     isFixed = models.BooleanField(default=False)
     fixedDate = models.DateTimeField(default=None, null=True)
+
+    def delete_me(self, user, region):
+        kind = eval(self.connectedPolicy.affectedResource)
+        kind.destroy_resource(self.resource_id, user, region)
+
+    def notify(self, recipient):
+        subject = 'Cloudini Alert'
+        message = 'resource {resource_id} has been detected by {activatedPolicy} policy'.\
+            format(resource_id=self.resource_id, activatedPolicy=self.connectedPolicy)
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [recipient, ]
+        send_mail(subject, message, email_from, recipient_list)
+

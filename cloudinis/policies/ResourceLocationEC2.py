@@ -1,22 +1,19 @@
-import boto3
-from cloudinis.policies.validator import *
-from botocore.exceptions import *
+from .validator import validator
+from .object_resources import EC2
 
 def ResourceLocationEC2(user, activatedPolicy):
     regionList = activatedPolicy.metadata
 
     for region in regionList:
         try:
-            client = boto3.client('ec2', aws_access_key_id=user.access_key, aws_secret_access_key=user.secret_key,
-                                  aws_session_token=user.session_token, region_name=region)
-            response = client.describe_instances()
+            response = EC2.list_all_of_a_kind(user, region)
 
             if not response == []:
                 for reservation in response['Reservations']:
                     for instance in reservation['Instances']:
                         if not instance['State']['Name'] == 'terminated':
-                            validator("InstanceId", instance, activatedPolicy)
+                            validator(instance["InstanceId"], activatedPolicy, user, region)
         except Exception:
-            return "{region} is invalid to use by the specified access key".format(region=region)
+            return "{region} is invalid to be used by the specified access key".format(region=region)
 
     return True

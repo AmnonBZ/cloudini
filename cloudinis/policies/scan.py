@@ -1,16 +1,10 @@
 from datetime import datetime
-# import schedule
-# import time
-# from celery.schedules import crontab
-# from celery.task import periodic_task
-# from datetime import timedelta
 from cloudinis.models import *
 from .ResourceLocationEC2 import ResourceLocationEC2
 from .VolumeEncryptionEC2 import VolumeEncryptionEC2
 from .TagEnforcementS3 import TagEnforcementS3
 from .ResourceType import ResourceType
 from .AttachedVolumes import AttachedVolumes
-from .remediator import deleteme
 from .NamingPolicy import NamingPolicy
 from .TagEnforcementEC2 import TagEnforcementEC2
 from .ResourceLocationS3 import ResourceLocationS3
@@ -89,30 +83,12 @@ def scan_for_violations(user):
             violation.fixedDate = datetime.now().strftime("%F %H:%M:%S")
             violation.save()
 
-#         if activatedPolicy.actionItem == "deleteme":
-#             deleteme(violation.resourceName, "instance")
-#         if activatedPolicy.actionItem == "notify":
-#             print("skipping")
-#     #notify()
-#         else:
-#             None
-#             #todo Couldnt fix by myself :: if activatedPolicy.actionItem == "deleteme"
-#             #the problem :: .actionItem is not recognized by the system
-
     return "Finished successfully"
 
+
+# implement schedule scan
 # organizations = Organization.objects.all()
 # for organization in organizations:
-#     admin_user = CloudiniUser.objects.get(username="admin_"+organization.name)
-#     schedule.every(1).minutes.do(scan_for_violations, user=admin_user)
-#
-# while True:
-#     schedule.run_pending()
-#     time.sleep(1)
-#
-# @periodic_task(run_every=timedelta(seconds=30))
-# def scan_every_minute():
-#     organizations = Organization.objects.all()
-#     for organization in organizations:
-#         admin_user = CloudiniUser.objects.get(username="admin_" + organization.name)
-#         scan_for_violations(admin_user)
+#     admin_user = CloudiniUser.objects.get(username="admin_" + organization.name)
+#     scan_for_violations(admin_user)
+
