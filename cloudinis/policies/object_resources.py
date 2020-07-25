@@ -14,6 +14,10 @@ class Resource:
     def list_tags(resource, user, region):
         raise NotImplementedError
 
+    @staticmethod
+    def list_tags_by_id(resource_id, user, region):
+        raise NotImplementedError
+
 
 class EC2(Resource):
     @staticmethod
@@ -40,6 +44,21 @@ class EC2(Resource):
 
         return tags
 
+    @staticmethod
+    def list_tags_by_id(resource_id, user, region):
+        client = boto3.client('ec2', aws_access_key_id=user.access_key, aws_secret_access_key=user.secret_key,
+                              aws_session_token=user.session_token, region_name=region)
+        resource = client.describe_instances(Filters=[{'Name': 'instance-id', 'Values': [resource_id]}])
+
+        tags = {}
+        try:
+            for tag in resource["Reservations"][0]["Instances"][0]["Tags"]:
+                tags[tag["Key"]] = tag["Value"]
+        except:
+            return False
+
+        return tags
+
 
 class Volume(Resource):
     @staticmethod
@@ -60,6 +79,21 @@ class Volume(Resource):
         tags = {}
         try:
             for tag in resource["Tags"]:
+                tags[tag["Key"]] = tag["Value"]
+        except:
+            return False
+
+        return tags
+
+    @staticmethod
+    def list_tags_by_id(resource_id, user, region):
+        client = boto3.client('ec2', aws_access_key_id=user.access_key, aws_secret_access_key=user.secret_key,
+                              aws_session_token=user.session_token, region_name=region)
+        resource = client.describe_volumes(Filters=[{'Name': 'volume-id', 'Values': [resource_id]}])
+
+        tags = {}
+        try:
+            for tag in resource["Volumes"][0]["Tags"]:
                 tags[tag["Key"]] = tag["Value"]
         except:
             return False
@@ -103,6 +137,24 @@ class S3(Resource):
 
         return tags
 
+    @staticmethod
+    def list_tags_by_id(resource_id, user, region):
+        tags = {}
+        try:
+            client = boto3.client('s3', aws_access_key_id=user.access_key, aws_secret_access_key=user.secret_key,
+                                  aws_session_token=user.session_token, region_name=region)
+            response = client.get_bucket_tagging(Bucket=resource_id)
+
+            try:
+                for tag in response["TagSet"]:
+                    tags[tag["Key"]] = tag["Value"]
+            except:
+                return False
+        except:
+            return False
+
+        return tags
+
 
 class EIP(Resource):
     @staticmethod
@@ -122,6 +174,21 @@ class EIP(Resource):
         tags = {}
         try:
             for tag in resource["Tags"]:
+                tags[tag["Key"]] = tag["Value"]
+        except:
+            return False
+
+        return tags
+
+    @staticmethod
+    def list_tags_by_id(resource_id, user, region):
+        client = boto3.client('ec2', aws_access_key_id=user.access_key, aws_secret_access_key=user.secret_key,
+                              aws_session_token=user.session_token, region_name=region)
+        resource = client.describe_addresses(Filters=[{'Name': 'allocation-id', 'Values': [resource_id]}])
+
+        tags = {}
+        try:
+            for tag in resource["Addresses"][0]["Tags"]:
                 tags[tag["Key"]] = tag["Value"]
         except:
             return False

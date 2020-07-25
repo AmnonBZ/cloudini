@@ -10,11 +10,11 @@ def calculate(resource_id, activatedPolicy, user, region):
     if validator:
         validator.isChecked = True
         validator.isFixed = False
-        for action_item in activatedPolicy.actionItem:
-            if action_item == "notify":
-                validator.notify(user.email)
-            if action_item == "delete":
-                validator.delete_me(user, region)
+        recipient = validator.get_recipient(user, region)
+        if activatedPolicy.actionItem.lower() == "notify":
+            validator.notify(recipient)
+        if activatedPolicy.actionItem.lower() == "delete":
+            validator.delete_me(user, region)
 
         validator.save()
     else:
@@ -25,12 +25,11 @@ def create_violation(resource_id, activatedPolicy, user, region):
     new_violation = Violation.objects.create(connectedPolicy=activatedPolicy, resource_id=resource_id,
                              date=datetime.now().strftime("%F %H:%M:%S"), isChecked=True, isFixed=False)
 
-    for action_item in activatedPolicy.actionItem:
-        if action_item == "notify":
-            new_violation.notify("amnon.bn1992@gmail.com")
-        if action_item == "delete":
-            new_violation.delete_me(user, region)
-
+    recipient = new_violation.get_recipient(user, region)
+    if activatedPolicy.actionItem.lower() == "notify":
+        new_violation.notify(recipient)
+    if activatedPolicy.actionItem.lower() == "delete":
+        new_violation.delete_me(user, region)
 
 def validator(resource_id, activatedPolicy, user, region):
     try:

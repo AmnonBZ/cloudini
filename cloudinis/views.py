@@ -50,7 +50,7 @@ def home(request):
     last_week = []
     for i in range(6,-1,-1):
         last_week.append((date.today() - timedelta(days=i)).strftime("%A"))
-        v_d.append(violations.filter(date=(date.today() - timedelta(days=i))).count())
+        v_d.append(violations.filter(date__date=(date.today() - timedelta(days=i))).count())
 
     # data4
     v_r_dict = {
@@ -121,7 +121,7 @@ def scan(request):
     scan_result = scan_for_violations(request.user)
     org = Organization.objects.get(name=request.user.organization)
     org.scan_status = scan_result[0:499]
-    org.last_scan_time = datetime.datetime.now().strftime("%F %H:%M:%S")
+    org.last_scan_time = datetime.now().strftime("%F %H:%M:%S")
     org.save(update_fields=['scan_status', 'last_scan_time'])
     return redirect('violations')
 

@@ -79,7 +79,7 @@ class ActivatedPolicy(models.Model):
     affectedResource = models.CharField(max_length=200 , verbose_name="Resource")
     metadata = ArrayField(models.CharField(max_length=200,),verbose_name="What to enforce")
     actionItem = models.CharField(max_length=200,choices=CHOICES, verbose_name="Action item")
-    resourceTagToNotify = ArrayField(models.CharField(max_length=200), verbose_name="Tag to notify")
+    resourceTagToNotify = models.CharField(max_length=200, verbose_name="Tag to notify")
 
     def __str__(self):
         return "{}".format(self.policy)
@@ -108,3 +108,15 @@ class Violation(models.Model):
         recipient_list = [recipient, ]
         send_mail(subject, message, email_from, recipient_list)
 
+
+    def get_recipient(self, user, region):
+        admin_user = CloudiniUser.objects.get(username=str("admin_" + self.connectedPolicy.organization.name))
+        kind = eval(self.connectedPolicy.affectedResource)
+        tags = kind.list_tags_by_id(self.resource_id, user, region)
+        if tags is False:
+            return admin_user.email
+        else:
+            if self.connectedPolicy.resourceTagToNotify in list(tags.keys()):
+                return tags[self.connectedPolicy.resourceTagToNotify]
+            else:
+                return admin_user.email

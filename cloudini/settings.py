@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'cloudini.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cloudini5',
+        'NAME': 'cloudini6',
         'USER': 'postgres',
         'PASSWORD': 'Aa123456!',
         'HOST': 'localhost',
