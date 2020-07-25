@@ -69,12 +69,17 @@ class Policy(models.Model):
 
 
 class ActivatedPolicy(models.Model):
+    CHOICES=(
+        ("None", "None"),
+        ("Notify", "Notify"),
+        ("Delete", "Delete"),
+    )
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=None, null=True)
     policy = models.ForeignKey(Policy, on_delete=models.CASCADE)
     affectedResource = models.CharField(max_length=200 , verbose_name="Resource")
     metadata = ArrayField(models.CharField(max_length=200,),verbose_name="What to enforce")
-    actionItem = ArrayField(models.CharField(max_length=200), verbose_name="Action item")
-    resourceTagToNotify = ArrayField(models.CharField(max_length=200), verbose_name="Tag to enforce")
+    actionItem = models.CharField(max_length=200,choices=CHOICES, verbose_name="Action item")
+    resourceTagToNotify = ArrayField(models.CharField(max_length=200), verbose_name="Tag to notify")
 
     def __str__(self):
         return "{}".format(self.policy)

@@ -69,7 +69,9 @@
                         <div class="sidebar-header">
                             <div class="brand">
                                 <div>
+                                    <a href="{% url 'home' %}">
                                     <img src = {% static 'pictures/cloudini.png' %} height="120" width="120" > </img>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -160,7 +162,6 @@
                     <div>© 2020 Cloudini. All Rights Reserved. </div>
 
                 </footer>
-{#<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>#}
 
         <script src="{% static 'js/chartscore.js' %}"></script>
         <script src="{% static 'js/vendor.js' %}"></script>
@@ -169,6 +170,10 @@
             var data11= {{data1 |safe }};
             var data22= {{data2 |safe }};
             var labels22= {{labels2|safe }};
+            var data33= {{data3 |safe }};
+            var labels33= {{labels3|safe }};
+            var data44= {{data4 |safe }};
+            var labels44= {{labels4|safe }};
         </script>
 
         <script src="{% static 'js/charts.js' %}"></script>

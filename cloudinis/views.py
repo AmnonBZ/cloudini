@@ -22,14 +22,13 @@ from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib import messages
 from django import forms
 from django.db import models
-import datetime
+from datetime import date, datetime, timedelta
 
 from django.contrib.auth.models import User, Group, Permission
 
 
 @login_required(login_url='/login/')
 def home(request):
-    print(datetime.datetime.now() - datetime.timedelta(days=1))
     policies = Policy.objects.all()
     activatedPolicies = ActivatedPolicy.objects.all().filter(organization_id=request.user.organization_id)
     violations = Violation.objects.all().filter(connectedPolicy__in=activatedPolicies)
@@ -38,7 +37,7 @@ def home(request):
     fixed = violations.filter(isFixed=True).count()
     notFixed = violations.filter(isFixed=False).count()
 
-    #data2
+    # data2
     v_ap = []
     policies_names = []
     for ap in activatedPolicies:
@@ -47,27 +46,39 @@ def home(request):
         policies_names.append(ap.policy.name +"-"+ap.affectedResource)
 
     # data3
-    d3=[]
-    months= [ "August", "September","October","November","December","January", "February", "March", "April","May","June","July"]
-
-    # for i in 12:
-    #     for v in violations:
-    #         if v.date
+    v_d = []
+    last_week = []
+    for i in range(6,-1,-1):
+        last_week.append((date.today() - timedelta(days=i)).strftime("%A"))
+        v_d.append(violations.filter(date=(date.today() - timedelta(days=i))).count())
 
     # data4
+    v_r_dict = {
+    }
+    v_r = []
+    valid_resources = []
+    for ap in activatedPolicies:
+        if ap.affectedResource not in v_r_dict:
+            v_r_dict[ap.affectedResource] = 0
+            valid_resources.append(ap.affectedResource)
+        v_r_dict[ap.affectedResource] += (violations.filter(connectedPolicy=ap).count())
+    for v in valid_resources:
+        v_r.append(v_r_dict[v])
 
     context = {
         'policies': policies,
         'data1': [fixed, notFixed],
         'data2': v_ap,
         'labels2': policies_names,
-        # 'data3':,
+        'data3': v_d,
+        'labels3': last_week,
+        'data4': v_r,
+        'labels4': valid_resources
     }
 
     next_url = request.GET.get('next')
-    if next_url=="/profile/":
+    if next_url == "/profile/":
         return profile(request)
-
 
     return render(request, 'home.html', context)
 
@@ -85,16 +96,6 @@ def about(request):
     return render(request, 'about.html')
 
 
-# @login_required(login_url='/login/')
-# def policies(request):
-#     try:
-#         policiesList = ActivatedPolicy.objects.all().filter(organization=request.user.organization_id)
-#     except ValueError:
-#         policiesList = []
-#
-#     return render(request, 'policies.html', {
-#         "policiesList": policiesList
-#     })
 
 
 @login_required
@@ -134,7 +135,7 @@ class PolicyListView(ListView):
 
 class PolicyCreateView(LoginRequiredMixin, CreateView):
     model = ActivatedPolicy
-    fields = ['policy','affectedResource', 'metadata', 'actionItem', 'resourceTagToNotify']
+    fields = ['policy', 'metadata', 'actionItem', 'resourceTagToNotify']
 
     def form_valid(self,form):
         form.instance.organization_id = self.request.user.organization_id
@@ -142,7 +143,7 @@ class PolicyCreateView(LoginRequiredMixin, CreateView):
 
 class PolicyUpdateView(LoginRequiredMixin,UserPassesTestMixin, UpdateView):
     model = ActivatedPolicy
-    fields = ['policy', 'affectedResource', 'metadata', 'actionItem', 'resourceTagToNotify']
+    fields = ['policy', 'metadata', 'actionItem', 'resourceTagToNotify']
 
     def form_valid(self, form):
         form.instance.organization_id = self.request.user.organization_id
@@ -222,7 +223,7 @@ def update_profile(request):
 
     context = {
         'form': user_form,
-        'myuser' : request.user,
+        'myuser': request.user,
     }
 
     return render(request, 'registration/update_profile.html', context)
