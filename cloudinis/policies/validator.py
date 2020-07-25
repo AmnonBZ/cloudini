@@ -11,8 +11,14 @@ def calculate(resource_id, activatedPolicy, user, region):
         validator.isChecked = True
         validator.isFixed = False
         for action_item in activatedPolicy.actionItem:
+            # if activatedPolicy.actionItem == "notify":
+            #     validator.notify(user.email)
+            # if activatedPolicy.actionItem == "delete":
+            #     validator.delete_me(user, region)
             if action_item == "notify":
-                validator.notify(user.email)
+                recipient = Violation.get_recipient(user, region)
+                validator.notify(recipient)
+                print(recipient)
             if action_item == "delete":
                 validator.delete_me(user, region)
 
@@ -27,7 +33,8 @@ def create_violation(resource_id, activatedPolicy, user, region):
 
     for action_item in activatedPolicy.actionItem:
         if action_item == "notify":
-            new_violation.notify("amnon.bn1992@gmail.com")
+            recipient = Violation.get_recipient(user, region)
+            new_violation.notify(recipient)
         if action_item == "delete":
             new_violation.delete_me(user, region)
 
