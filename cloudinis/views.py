@@ -186,6 +186,7 @@ def register(request):
         if form.is_valid():
             new_user = form.save()
             new_user.organization_id = request.user.organization_id
+            new_user.username = new_user.username + "@" + new_user.organization.name
             new_user.is_active = True
             new_user.access_key = request.user.access_key
             new_user.secret_key = request.user.secret_key
