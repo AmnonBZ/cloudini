@@ -87,6 +87,10 @@ class ActivatedPolicy(models.Model):
     def get_absolute_url(self):
         return reverse('policies')
 
+    def save(self, *args, **kwargs):
+        self.affectedResource = self.policy.affectedResources
+        super().save(*args, **kwargs)
+
 
 class Violation(models.Model):
     connectedPolicy = models.ForeignKey(ActivatedPolicy, on_delete=models.CASCADE)
