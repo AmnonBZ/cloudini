@@ -25,13 +25,15 @@ SECRET_KEY = 'sn-m0bm2=s92q9+#q=7pu0%nq5nf(1=o6@%sl^!d@pb^ys6o5l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'cloudinis.apps.CloudinisConfig',
+    'cloudinis',
+    'api',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -49,6 +51,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 
 ROOT_URLCONF = 'cloudini.urls'
 
@@ -80,11 +83,12 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'Aa123456!',
-        'HOST': 'localhost',
+        'PASSWORD': 'Ma159357!',
+        'HOST': 'cloudini.czomcz2848ja.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
+
 
 
 # Password validation
@@ -124,3 +128,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/'
+AUTH_USER_MODEL = 'cloudinis.CloudiniUser'
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES' : ('rest_framework.permissions.IsAuthenticated',)
+}
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'cloudini.donotreply@gmail.com'
+EMAIL_HOST_PASSWORD = 'SuperUser!'
