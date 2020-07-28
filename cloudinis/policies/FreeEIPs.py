@@ -10,7 +10,7 @@ def FreeEIPs(user, activatedPolicy):
         response = EIP.list_all_of_a_kind(user, region)
         for address in response["Addresses"]:
             try:
-                address["InstanceId"]
+                print(address["InstanceId"])
             except KeyError:
                 validator(address["AllocationId"], activatedPolicy, user, region)
     return True
