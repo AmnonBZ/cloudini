@@ -96,24 +96,25 @@ def about(request):
     return render(request, 'about.html')
 
 
-
-
 @login_required
 def violations(request):
-    violationsList = Violation.objects.all().filter(connectedPolicy__organization=request.user.organization_id,
-                                                    isFixed=False).order_by("date")
-    scan_status = request.user.organization.scan_status
-    last_scan_time = request.user.organization.last_scan_time
+    if request.user.organization_id is not None:
+        violationsList = Violation.objects.all().filter(connectedPolicy__organization=request.user.organization_id,
+                                                        isFixed=False).order_by("date")
+        scan_status = request.user.organization.scan_status
+        last_scan_time = request.user.organization.last_scan_time
 
-    if scan_status == "Finished successfully":
-        messages.success(request, scan_status)
+        if scan_status == "Finished successfully":
+            messages.success(request, scan_status)
+        else:
+            messages.warning(request, scan_status)
+
+        return render(request, 'violations.html', {
+            "violationsList": violationsList,
+            "last_scan_time": last_scan_time
+        })
     else:
-        messages.warning(request, scan_status)
-
-    return render(request, 'violations.html', {
-        "violationsList": violationsList,
-        "last_scan_time": last_scan_time
-    })
+        return render(request, '404.html')
 
 
 @login_required
