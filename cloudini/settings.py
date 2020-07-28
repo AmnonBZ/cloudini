@@ -81,13 +81,14 @@ WSGI_APPLICATION = 'cloudini.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cloudini6',
+        'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD': 'Aa123456!',
-        'HOST': 'localhost',
+        'PASSWORD': 'Ma159357!',
+        'HOST': 'cloudini.czomcz2848ja.us-east-1.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
+
 
 
 # Password validation
