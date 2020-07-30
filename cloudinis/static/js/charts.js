@@ -45,11 +45,17 @@ var myChart = new Chart(ctx2, {
             borderWidth: 1
         }]
     },
-    options: {
-        responsive:true,
-        maintainAspectRatio: false,
-
+options: {
+    responsive:true,
+    maintainAspectRatio: false,
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            }
+        }]
     }
+}
 });
 
 var ctx3 = document.getElementById('chart3').getContext('2d');
@@ -69,7 +75,13 @@ var myChart = new Chart(ctx3, {
     options: {
         responsive:true,
         maintainAspectRatio: false,
-
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        }
     }
 });
 

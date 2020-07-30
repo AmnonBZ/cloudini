@@ -84,11 +84,3 @@ def scan_for_violations(user):
             violation.save()
 
     return "Finished successfully"
-
-
-# implement schedule scan
-# organizations = Organization.objects.all()
-# for organization in organizations:
-#     admin_user = CloudiniUser.objects.get(username="admin_" + organization.name)
-#     scan_for_violations(admin_user)
-
